@@ -1,8 +1,7 @@
 Flask==2.3.3
-psycopg2-binary==2.9.6
-SQLAlchemy==2.0.23
-gunicorn==21.2.0
-pandas==2.2.3
-Jinja2==3.1.6
-numpy==2.2.4
-scikit-learn==1.7.0
+pandas
+numpy
+scikit-learn
+psycopg2-binary
+gunicorn
+Jinja2
