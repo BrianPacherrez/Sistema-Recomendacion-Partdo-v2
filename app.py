@@ -13,6 +13,12 @@ cursor = conn.cursor()
 app = Flask(__name__)
 app.secret_key = "admin_root"  # cambia esto
 
+# Flask
+app.secret_key = os.environ.get("SECRET_KEY")
+
+# PostgreSQL
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL")
+
 # Cargar Imagenes
 nombre_a_imagen = {
     "Café Bourbon": "Cafe_Bourbon.png",
@@ -503,4 +509,5 @@ def logout():
 
 
 if __name__ == "__main__":
+
     app.run(debug=True)
