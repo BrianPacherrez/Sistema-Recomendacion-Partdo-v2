@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="{{ lang }}">
+<head>
+    <title>Recomendador de Café</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css">
+
+    
+    <link href="https://fonts.googleapis.com/css2?family=Trocchi&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+    <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
+</head>
+<body>
+    <header>
+        <a class="logo" href="#">PARTDO COFFE</a>
+
+        <ul class="ul_contador">
+
+            <li class="iniciar-sesion">
+                <i class="bi bi-person-circle icono-nav"></i>
+                {% if session.get('usuario') %}
+                    <!-- Hola, {{ session.get('usuario') }} -->
+                    {{ textos.hola }}, {{ session.get('usuario') }}
+                {% else %}
+                    <!-- Hola, Inicia sesión -->
+                    {{ textos.inicia_sesion }}
+                {% endif %}
+
+                <ul class="ul-segundo">
+                    {% if session.get('usuario') %}
+                    <li><a href="{{ url_for('logout') }}">{{ textos.cerrar_sesion }}</a></li>
+                    {% else %}
+                    <li><a href="{{ url_for('login') }}">{{ textos.iniciar_sesion }}</a></li>
+                    {% endif %}
+                </ul>
+            </li>
+
+            {% if session.get('rol') == 'admin' %}
+            <li><a class="icono" href="{{ url_for('resultados') }}"><i class="bi bi-bar-chart-line icono-nav"></i> {{ textos.resultados }}</a></li>
+            {% endif %}
+
+        </ul>
+    </header>
+    
+    <h1 class="titulo">☕ {{ textos.titulo }}</h1>
+
+    <!-- Idioma -->
+    <form class="mb-3 d-flex justify-content-between align-items-center Opciones">
+        <div>
+            
+            <button id="btnLeer" type="button" class="btn btn-secondary" onclick="leerFrases()">🔊 {{ textos.leer }}</button>
+            <button type="button" class="btn btn-outline-dark" onclick="reconocer()">🎙️ {{ textos.voz }}</button>
+        </div>
+        <div>
+            <img src="{{ url_for('static', filename='images/Logo_Partdo.png') }}" 
+            alt="Decoración" 
+            style="width: 70px;">
+        </div>
+        <div>
+            <label for="lang" class="me-2">🌐 {{ 'Idioma' if lang == 'es' else 'Language' }}:</label>
+            <select name="lang" onchange="this.form.submit()">
+                <option value="es" {% if lang == 'es' %}selected{% endif %}>Español</option>
+                <option value="en" {% if lang == 'en' %}selected{% endif %}>English</option>
+            </select>
+        </div>
+    </form>
+
+    <img src="{{ url_for('static', filename='images/Logo_Partdo.png') }}" 
+        alt="Decoración" 
+        style="position: fixed; bottom: 20px; right: 20px; width: 80px; z-index: 999; pointer-events: none;">
+
+        <form method="POST" class="mt-4" id="formulario" action="/?lang={{ lang }}">
+
+            <input type="text" name="nombre" id="nombre" class="form-control" placeholder="{{ textos.placeholder }}" required autocomplete="off"><br>
+
+            <div id="perfil_sabor_group" style="display: none;">
+
+                <label for="perfil">{{ textos.sabor_label }}</label>
+                <select name="perfil" id="perfil" class="form-select" multiple>
+
+                    {% for sabor in textos.sabores %}
+                        <option value="{{ sabor | lower }}">{{ sabor }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <!-- <br> -->
+
+            <button type="submit" class="btn btn-light">{{ textos.boton }}</button>
+
+        </form>
+        
+        <br>
+        
+        <form method="get" action="{{ url_for('encuesta') }}">
+            <button type="submit" class="btn btn-light">{{ textos.encuesta }}</button>
+        </form>
+
+
+    <div id="sabores-container">
+        {% if sabores_seleccionados %}
+            <div class="alert alert-warning text-center mt-4">
+                <strong>✨ {{ textos.seleccion }} 😋</strong><br>
+                {% for s in sabores_seleccionados %}
+                    ☕ {{ s }}{% if not loop.last %}, {% endif %}
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
+        
+    <div id="recomendaciones-container">
+        {% if recomendaciones %}
+            <h3 class="text-black text-center mt-4">✨ {{ textos.recomendaciones }}</h3>
+            <div class="d-flex justify-content-center flex-wrap gap-4 mt-4">
+                {% for rec in recomendaciones %}
+                    <div class="col-md-4 producto">
+                        <h5>{{ rec }}</h5>
+                        <img src="{{ url_for('static', filename='images/' + nombre_a_imagen.get(rec, 'default.jpg')) }}"
+                            class="img-fluid rounded"
+                            onerror="this.onerror=null;this.src='/static/images/default.jpg';">
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
+
+    {% if historial %}
+        <div id="historial-container">
+             <h4 class="text-black text-center mt-5">🕓 {{ textos.historial }}</h4>
+            <div class="d-flex flex-wrap gap-3 justify-content-center mt-3">
+                {% for prod in historial %}
+                    <div class="producto text-center p-3" style="width: 240px;">
+                        <h6>{{ prod }}</h6>
+                        <img src="{{ url_for('static', filename='images/' + nombre_a_imagen.get(prod, 'default.jpg')) }}"
+                            class="img-fluid rounded"
+                            onerror="this.onerror=null;this.src='/static/images/default.jpg';">
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+
+
+    <!-- Mostrar alertas -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <script>
+                    alert("{{ message }}");
+                </script>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+
+    <script>
+        let synth = window.speechSynthesis;
+        let leyendo = false;
+
+        function leerFrases() {
+            if (leyendo) {
+                synth.cancel(); // Detener lectura actual
+                leyendo = false;
+                document.getElementById("btnLeer").innerText = "🔊 {{ textos.leer }}";
+                return;
+            }
+
+            const frases = [
+                "{{ textos.titulo }}",
+                "{{ textos.recomendaciones }}",
+                "{{ recomendaciones | join(', ') }}",
+                "{{ textos.historial }}",
+                "{{ historial | join(', ') }}"
+            ];
+
+            leyendo = true;
+            document.getElementById("btnLeer").innerText = "⏹️ Detener";
+
+            let index = 0;
+
+            function leerSiguiente() {
+                if (index < frases.length) {
+                    const utterance = new SpeechSynthesisUtterance(frases[index]);
+                    utterance.onend = () => {
+                        index++;
+                        leerSiguiente(); // Llama a la siguiente frase al terminar
+                    };
+                    utterance.onerror = () => {
+                        leyendo = false;
+                        document.getElementById("btnLeer").innerText = "🔊 {{ textos.leer }}";
+                    };
+                    synth.speak(utterance);
+                } else {
+                    leyendo = false;
+                    document.getElementById("btnLeer").innerText = "🔊 {{ textos.leer }}";
+                }
+            }
+
+            leerSiguiente();
+        }
+
+        function reconocer() {
+            const reconocimiento = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+            reconocimiento.lang = "{{ 'es-ES' if lang == 'es' else 'en-US' }}";
+            reconocimiento.onresult = function(event) {
+                const texto = event.results[0][0].transcript.toLowerCase();
+                document.getElementById("nombre").value = texto;
+            };
+            reconocimiento.start();
+        }
+    </script>
+
+
+    <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                    const usuariosRegistrados = JSON.parse('{{ usuarios_csv | tojson | safe }}');
+                    const formulario = document.getElementById("formulario");
+                    const nombreInput = document.getElementById("nombre");
+                    const perfilDiv = document.getElementById("perfil_sabor_group");
+                    const perfilSelect = document.getElementById("perfil");
+                    const recomendacionesDiv = document.getElementById("recomendaciones-container");
+                    const historialDiv = document.getElementById("historial-container");
+                    const saboresDiv = document.getElementById("sabores-container")
+
+                    // Inicializar Choices.js
+                    const choices = new Choices(perfilSelect, {
+                        removeItemButton: true,
+                        maxItemCount: 3,
+                        placeholder: true,
+                        placeholderValue: '{{ textos.placeholderValue }}',
+                        searchEnabled: false,
+                        maxItemText: (maxItemCount) => {
+                            return "{{ textos.maxSabores }}";  // Traducción desde Flask
+                        }
+                    });
+
+                    nombreInput.addEventListener("input", function () {
+                        const nombre = nombreInput.value.trim().toLowerCase();
+                        const esNuevo = !usuariosRegistrados.includes(nombre);
+                        perfilDiv.style.display = esNuevo ? "block" : "none";
+                    });
+                    
+                    // Borrar historial
+                    nombreInput.addEventListener("focus", function () {
+                        if (recomendacionesDiv) {
+                            recomendacionesDiv.innerHTML = '';
+                        }
+                        if (historialDiv) {
+                            historialDiv.innerHTML = '';
+                        }
+                        if (saboresDiv) {
+                            saboresDiv.innerHTML = '';
+                        }
+                    });
+
+                    formulario.addEventListener("submit", function (e) {
+                        const nombre = nombreInput.value.trim().toLowerCase();
+                        const perfilSeleccionado = choices.getValue(true);
+                        const esNuevo = !usuariosRegistrados.includes(nombre);
+
+                        if (esNuevo && perfilSeleccionado.length === 0) {
+                            e.preventDefault();
+                            alert("Por favor selecciona al menos un perfil de sabor.");
+                        }
+                    });
+
+                    const mensajeMax = "{{ textos.maxSabores }}";  // viene traducido desde Flask
+                    select.addEventListener("change", function () {
+                        if (select.selectedOptions.length > 3) {
+                            alert(mensajeMax);
+                            select.options[select.selectedIndex].selected = false;
+                        }
+                    });
+                });
+    </script>
+
+    <script>
+        document.getElementById('lang-select').addEventListener('change', function () {
+            const selectedLang = this.value;
+            const currentUrl = new URL(window.location.href);
+            currentUrl.searchParams.set('lang', selectedLang);
+            window.location.href = currentUrl.toString();
+        });
+    </script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Resultados</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <h1 class="titulo_resultados">📝 Resultados de la encuesta</h1>
+    
+    <div class="card-header contenedor_resultado_titulo" style="background: linear-gradient(135deg, rgba(87, 61, 31, 0.85), rgba(133, 69, 6, 0.75)); color: white; font-weight: bold;">
+        <h3 style="margin-bottom: 25px;"><strong>Dimensión 1: Experiencia afectiva (Preguntas 1 - 7)</strong></h3>
+    
+
+        <div class="card-body contenedor_graficos">
+            <!-- Pregunta 1 -->
+            <h3>Pregunta 1: Me sentí emocionalmente conectado con la marca o el producto al recibir recomendaciones.</h3>
+            <canvas id="chartP1" width="400" height="200"></canvas>
+        </div> 
+    
+      
+        <div class="contenedor_graficos">
+            <!-- Pregunta 2 -->
+            <h3>Pregunta 2: Las recomendaciones personalizadas hicieron que la experiencia fuera más agradable.</h3>
+            <canvas id="chartP2" width="400" height="200"></canvas>
+        </div>
+
+        <div class="contenedor_graficos">
+            <!-- Pregunta 3 -->
+            <h3>Pregunta 3: Sentí satisfacción/agrado al interactuar con el sistema de recomendación.</h3>
+            <canvas id="chartP3" width="400" height="200"></canvas>
+        </div>
+
+        <div class="contenedor_graficos">
+            <!-- Pregunta 4 -->
+            <h3>Pregunta 4: Me generó emociones positivas ser atendido de manera personalizada por usar el sistema.</h3>
+            <canvas id="chartP4" width="400" height="200"></canvas>
+        </div>
+          
+        <div class="contenedor_graficos">
+            <!-- Pregunta 5 -->
+            <h3>Pregunta 5: Me sentí valorado como cliente por las recomendaciones recibidas.</h3>
+            <canvas id="chartP5" width="400" height="200"></canvas>
+        </div>
+
+        <div class="contenedor_graficos">
+            <!-- Pregunta 6 -->
+            <h3>Pregunta 6: Disfruté el proceso de recibir sugerencias personalizadas.</h3>
+            <canvas id="chartP6" width="400" height="200"></canvas>
+        </div>
+
+        <div class="contenedor_graficos">
+            <!-- Pregunta 7 -->
+            <h3>Pregunta 7: Recibir recomendaciones personalizadas mejoró mi estado de ánimo durante la compra.</h3>
+            <canvas id="chartP7" width="400" height="200"></canvas>
+        </div>
+
+    </div>
+
+    <div class="card-header contenedor_resultado_titulo" style="background: linear-gradient(135deg, rgba(87, 61, 31, 0.85), rgba(133, 69, 6, 0.75)); color: white; font-weight: bold;">
+        <h3 style="margin-bottom: 25px;"><strong>Dimensión 2: Experiencia cognitiva (Preguntas 8 - 12)</strong></h3>
+
+        <div class="contenedor_graficos">
+            <!-- Pregunta 8 -->
+            <h3>Pregunta 8: Las recomendaciones fueron útiles para decidir qué producto elegir.</h3>
+            <canvas id="chartP8" width="400" height="200"></canvas>
+        </div>
+
+        <div class="contenedor_graficos">
+            <!-- Pregunta 9 -->
+            <h3>Pregunta 9: El sistema me ayudó a descubrir productos nuevos que me interesaron.</h3>
+            <canvas id="chartP9" width="400" height="200"></canvas>
+        </div>
+
+        <div class="contenedor_graficos">
+            <!-- Pregunta 10 -->
+            <h3>Pregunta 10: La información proporcionada fue clara y comprensible.</h3>
+            <canvas id="chartP10" width="400" height="200"></canvas>
+        </div>
+
+        <div class="contenedor_graficos">
+            <!-- Pregunta 11 -->
+            <h3>Pregunta 11: El sistema de recomendación facilitó mi proceso de compra.</h3>
+            <canvas id="chartP11" width="400" height="200"></canvas>
+        </div>
+
+        <div class="contenedor_graficos">
+            <!-- Pregunta 12 -->
+            <h3>Pregunta 12: Las sugerencias se adaptaron a mis necesidades o preferencias.</h3>
+            <canvas id="chartP12" width="400" height="200"></canvas>
+        </div>
+
+    </div>
+
+    <div class="card-header contenedor_resultado_titulo" style="background: linear-gradient(135deg, rgba(87, 61, 31, 0.85), rgba(133, 69, 6, 0.75)); color: white; font-weight: bold;">
+        <h3 style="margin-bottom: 25px;"><strong>Dimensión 3: Experiencia social (Preguntas 13 - 15)</strong></h3>
+
+        <div class="contenedor_graficos">
+            <!-- Pregunta 13 -->
+            <h3>Pregunta 13: Compartí mi experiencia de compra con otras personas.</h3>
+            <canvas id="chartP13" width="400" height="200"></canvas>
+        </div>
+
+        <div class="contenedor_graficos">
+            <!-- Pregunta 14 -->
+            <h3>Pregunta 14: Recomendaría este servicio brindado por el sistema a familiares o amigos.</h3>
+            <canvas id="chartP14" width="400" height="200"></canvas>
+        </div>
+
+        <div class="contenedor_graficos">
+            <!-- Pregunta 15 -->
+            <h3>Pregunta 15: Me sentí parte de una comunidad de clientes satisfechos.</h3>
+            <canvas id="chartP15" width="400" height="200"></canvas>
+        </div>
+    </div>
+      
+    <script>
+        // Pregunta 1
+        const ctx1 = document.getElementById('chartP1').getContext('2d');
+        new Chart(ctx1, {
+            type: 'bar',
+            data: { labels: JSON.parse('{{ labels|tojson|safe }}'), datasets: [{ label: 'Respuestas P.1', data: JSON.parse('{{ values|tojson|safe }}'), backgroundColor: ['red','blue','green','orange'] }] },
+            options: { responsive: true, scales: { y: { beginAtZero: true } } }
+        });
+
+        // Pregunta 2
+        const ctx2 = document.getElementById('chartP2').getContext('2d');
+        new Chart(ctx2, {
+            type: 'bar',
+            data: { labels: JSON.parse('{{ labels_p2|tojson|safe }}'), datasets: [{ label: 'Respuestas P.2', data: JSON.parse('{{ values_p2|tojson|safe }}'), backgroundColor: ['purple','yellow','cyan','pink'] }] },
+            options: { responsive: true, scales: { y: { beginAtZero: true } } }
+        });
+
+        // Pregunta 3
+        const ctx3 = document.getElementById('chartP3').getContext('2d');
+        new Chart(ctx3, {
+            type: 'bar',
+            data: { labels: JSON.parse('{{ labels_p3|tojson|safe }}'), datasets: [{ label: 'Respuestas P.3', data: JSON.parse('{{ values_p3|tojson|safe }}'), backgroundColor: ['green','yellow','blue','pink'] }] },
+            options: { responsive: true, scales: { y: { beginAtZero: true } } }
+        });
+
+        // Pregunta 4
+        const ctx4 = document.getElementById('chartP4').getContext('2d');
+        new Chart(ctx4, {
+            type: 'bar',
+            data: { labels: JSON.parse('{{ labels_p4|tojson|safe }}'), datasets: [{ label: 'Respuestas P.4', data: JSON.parse('{{ values_p4|tojson|safe }}'), backgroundColor: ['orange','brown','blue','pink'] }] },
+            options: { responsive: true, scales: { y: { beginAtZero: true } } }
+        });
+
+        // Pregunta 5
+        const ctx5 = document.getElementById('chartP5').getContext('2d');
+        new Chart(ctx5, {
+            type: 'bar',
+            data: { labels: JSON.parse('{{ labels_p5|tojson|safe }}'), datasets: [{ label: 'Respuestas P.5', data: JSON.parse('{{ values_p5|tojson|safe }}'), backgroundColor: ['cyan','magenta','yellow','black'] }] },
+            options: { responsive: true, scales: { y: { beginAtZero: true } } }
+        });
+
+        // Pregunta 6
+        const ctx6 = document.getElementById('chartP6').getContext('2d');
+        new Chart(ctx6, {
+            type: 'bar',
+            data: { labels: JSON.parse('{{ labels_p6|tojson|safe }}'), datasets: [{ label: 'Respuestas P.6', data: JSON.parse('{{ values_p6|tojson|safe }}'), backgroundColor: ['blue','green','yellow','red'] }] },
+            options: { responsive: true, scales: { y: { beginAtZero: true } } }
+        });
+
+        // Pregunta 7
+        const ctx7 = document.getElementById('chartP7').getContext('2d');
+        new Chart(ctx7, {
+            type: 'bar',
+            data: { labels: JSON.parse('{{ labels_p7|tojson|safe }}'), datasets: [{ label: 'Respuestas P.7', data: JSON.parse('{{ values_p7|tojson|safe }}'), backgroundColor: ['pink','purple','cyan','lime'] }] },
+            options: { responsive: true, scales: { y: { beginAtZero: true } } }
+        });
+
+        // Pregunta 8
+        const ctx8 = document.getElementById('chartP8').getContext('2d');
+        new Chart(ctx8, {
+            type: 'bar',
+            data: { labels: JSON.parse('{{ labels_p8|tojson|safe }}'), datasets: [{ label: 'Respuestas P.8', data: JSON.parse('{{ values_p8|tojson|safe }}'), backgroundColor: ['gray','red','blue','green'] }] },
+            options: { responsive: true, scales: { y: { beginAtZero: true } } }
+        });
+
+        // Pregunta 9
+        const ctx9 = document.getElementById('chartP9').getContext('2d');
+        new Chart(ctx9, {
+            type: 'bar',
+            data: { labels: JSON.parse('{{ labels_p9|tojson|safe }}'), datasets: [{ label: 'Respuestas P.9', data: JSON.parse('{{ values_p9|tojson|safe }}'), backgroundColor: ['navy','orange','teal','maroon'] }] },
+            options: { responsive: true, scales: { y: { beginAtZero: true } } }
+        });
+
+        // Pregunta 10
+        const ctx10 = document.getElementById('chartP10').getContext('2d');
+        new Chart(ctx10, {
+            type: 'bar',
+            data: { labels: JSON.parse('{{ labels_p10|tojson|safe }}'), datasets: [{ label: 'Respuestas P.10', data: JSON.parse('{{ values_p10|tojson|safe }}'), backgroundColor: ['gold','blue','purple','green'] }] },
+            options: { responsive: true, scales: { y: { beginAtZero: true } } }
+        });
+
+        // Pregunta 11
+        const ctx11 = document.getElementById('chartP11').getContext('2d');
+        new Chart(ctx11, {
+            type: 'bar',
+            data: { labels: JSON.parse('{{ labels_p11|tojson|safe }}'), datasets: [{ label: 'Respuestas P.11', data: JSON.parse('{{ values_p11|tojson|safe }}'), backgroundColor: ['blue','red','gray','yellow'] }] },
+            options: { responsive: true, scales: { y: { beginAtZero: true } } }
+        });
+
+        // Pregunta 12
+        const ctx12 = document.getElementById('chartP12').getContext('2d');
+        new Chart(ctx12, {
+            type: 'bar',
+            data: { labels: JSON.parse('{{ labels_p12|tojson|safe }}'), datasets: [{ label: 'Respuestas P.12', data: JSON.parse('{{ values_p12|tojson|safe }}'), backgroundColor: ['green','purple','yellow','orange'] }] },
+            options: { responsive: true, scales: { y: { beginAtZero: true } } }
+        });
+
+        // Pregunta 13
+        const ctx13 = document.getElementById('chartP13').getContext('2d');
+        new Chart(ctx13, {
+            type: 'bar',
+            data: { labels: JSON.parse('{{ labels_p13|tojson|safe }}'), datasets: [{ label: 'Respuestas P.13', data: JSON.parse('{{ values_p13|tojson|safe }}'), backgroundColor: ['cyan','pink','lime','blue'] }] },
+            options: { responsive: true, scales: { y: { beginAtZero: true } } }
+        });
+
+        // Pregunta 14
+        const ctx14 = document.getElementById('chartP14').getContext('2d');
+        new Chart(ctx14, {
+            type: 'bar',
+            data: { labels: JSON.parse('{{ labels_p14|tojson|safe }}'), datasets: [{ label: 'Respuestas P.14', data: JSON.parse('{{ values_p14|tojson|safe }}'), backgroundColor: ['brown','green','red','yellow'] }] },
+            options: { responsive: true, scales: { y: { beginAtZero: true } } }
+        });
+
+        // Pregunta 15
+        const ctx15 = document.getElementById('chartP15').getContext('2d');
+        new Chart(ctx15, {
+            type: 'bar',
+            data: { labels: JSON.parse('{{ labels_p15|tojson|safe }}'), datasets: [{ label: 'Respuestas P.15', data: JSON.parse('{{ values_p15|tojson|safe }}'), backgroundColor: ['purple','orange','blue','pink'] }] },
+            options: { responsive: true, scales: { y: { beginAtZero: true } } }
+        });
+    </script>
+
+</body>
+</html>

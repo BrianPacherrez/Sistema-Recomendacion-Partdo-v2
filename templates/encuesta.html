@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Encuesta</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    
+    <form method="post" action="{{ url_for('encuesta') }}">
+    
+        <div class="container">
+            <h1 class="titulo_encuesta">📝 Encuesta de Satisfacción</h1>
+        </div>
+
+        <!-- Dimensión 1: Experiencia afectiva (Preguntas 1 a 7) -->
+        <div class="card mb-4 container" style="backdrop-filter: blur(8px);">
+            <div class="card-header" style="background: linear-gradient(135deg, rgba(121,85,72,0.9), rgba(188,155,120,0.9)); color: white; font-weight: bold;">
+                <strong>Dimensión 1: Experiencia afectiva (Preguntas 1 - 7)</strong>
+            </div>
+
+            <!-- <h5>Dimensión 1: Experiencia afectiva</h5> -->
+            <div class="card-body" style="background: rgba(245,238,230,0.5);">
+                <div class="mb-3">
+                    <p><strong>1. Me sentí emocionalmente conectado con la marca o el producto al recibir recomendaciones.</p></strong>
+                    <div class="d-flex flex-column gap-2">
+                        <label><input type="radio" name="p1" value="Totalmente en desacuerdo" required> Totalmente en desacuerdo</label>
+                        <label><input type="radio" name="p1" value="En desacuerdo"> En desacuerdo</label>
+                        <label><input type="radio" name="p1" value="Ligeramente en desacuerdo"> Ligeramente en desacuerdo</label>
+                        <label><input type="radio" name="p1" value="Ligeramente de acuerdo"> Ligeramente de acuerdo</label>
+                        <label><input type="radio" name="p1" value="De acuerdo"> De acuerdo</label>
+                        <label><input type="radio" name="p1" value="Totalmente de acuerdo"> Totalmente de acuerdo</label>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <p><strong>2. Las recomendaciones personalizadas hicieron que la experiencia fuera más agradable.</p></strong>
+                    <div class="d-flex flex-column gap-2">
+                        <label><input type="radio" name="p2" value="Totalmente en desacuerdo" required> Totalmente en desacuerdo</label>
+                        <label><input type="radio" name="p2" value="En desacuerdo"> En desacuerdo</label>
+                        <label><input type="radio" name="p2" value="Ligeramente en desacuerdo"> Ligeramente en desacuerdo</label>
+                        <label><input type="radio" name="p2" value="Ligeramente de acuerdo"> Ligeramente de acuerdo</label>
+                        <label><input type="radio" name="p2" value="De acuerdo"> De acuerdo</label>
+                        <label><input type="radio" name="p2" value="Totalmente de acuerdo"> Totalmente de acuerdo</label>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <p><strong>3. Sentí satisfacción/agrado al interactuar con el vendedor/sistema de recomendación.</p></strong>
+                    <div class="d-flex flex-column gap-2">
+                        <label><input type="radio" name="p3" value="Totalmente en desacuerdo" required> Totalmente en desacuerdo</label>
+                        <label><input type="radio" name="p3" value="En desacuerdo"> En desacuerdo</label>
+                        <label><input type="radio" name="p3" value="Ligeramente en desacuerdo"> Ligeramente en desacuerdo</label>
+                        <label><input type="radio" name="p3" value="Ligeramente de acuerdo"> Ligeramente de acuerdo</label>
+                        <label><input type="radio" name="p3" value="De acuerdo"> De acuerdo</label>
+                        <label><input type="radio" name="p3" value="Totalmente de acuerdo"> Totalmente de acuerdo</label>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <p><strong>4. Me generó emociones positivas ser atendido de manera personalizada por el vendedor/usar el sistema.</p></strong>
+                    <div class="d-flex flex-column gap-2">
+                        <label><input type="radio" name="p4" value="Totalmente en desacuerdo" required> Totalmente en desacuerdo</label>
+                        <label><input type="radio" name="p4" value="En desacuerdo"> En desacuerdo</label>
+                        <label><input type="radio" name="p4" value="Ligeramente en desacuerdo"> Ligeramente en desacuerdo</label>
+                        <label><input type="radio" name="p4" value="Ligeramente de acuerdo"> Ligeramente de acuerdo</label>
+                        <label><input type="radio" name="p4" value="De acuerdo"> De acuerdo</label>
+                        <label><input type="radio" name="p4" value="Totalmente de acuerdo"> Totalmente de acuerdo</label>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <p><strong>5. Me sentí valorado como cliente por las recomendaciones recibidas.</p></strong>
+                    <div class="d-flex flex-column gap-2">
+                        <label><input type="radio" name="p5" value="Totalmente en desacuerdo" required> Totalmente en desacuerdo</label>
+                        <label><input type="radio" name="p5" value="En desacuerdo"> En desacuerdo</label>
+                        <label><input type="radio" name="p5" value="Ligeramente en desacuerdo"> Ligeramente en desacuerdo</label>
+                        <label><input type="radio" name="p5" value="Ligeramente de acuerdo"> Ligeramente de acuerdo</label>
+                        <label><input type="radio" name="p5" value="De acuerdo"> De acuerdo</label>
+                        <label><input type="radio" name="p5" value="Totalmente de acuerdo"> Totalmente de acuerdo</label>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <p><strong>6. Disfruté el proceso de recibir sugerencias personalizadas.</p></strong>
+                    <div class="d-flex flex-column gap-2">
+                        <label><input type="radio" name="p6" value="Totalmente en desacuerdo" required> Totalmente en desacuerdo</label>
+                        <label><input type="radio" name="p6" value="En desacuerdo"> En desacuerdo</label>
+                        <label><input type="radio" name="p6" value="Ligeramente en desacuerdo"> Ligeramente en desacuerdo</label>
+                        <label><input type="radio" name="p6" value="Ligeramente de acuerdo"> Ligeramente de acuerdo</label>
+                        <label><input type="radio" name="p6" value="De acuerdo"> De acuerdo</label>
+                        <label><input type="radio" name="p6" value="Totalmente de acuerdo"> Totalmente de acuerdo</label>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <p><strong>7. Recibir recomendaciones personalizadas mejoró mi estado de ánimo durante la compra.</p></strong>
+                    <div class="d-flex flex-column gap-2">
+                        <label><input type="radio" name="p7" value="Totalmente en desacuerdo" required> Totalmente en desacuerdo</label>
+                        <label><input type="radio" name="p7" value="En desacuerdo"> En desacuerdo</label>
+                        <label><input type="radio" name="p7" value="Ligeramente en desacuerdo"> Ligeramente en desacuerdo</label>
+                        <label><input type="radio" name="p7" value="Ligeramente de acuerdo"> Ligeramente de acuerdo</label>
+                        <label><input type="radio" name="p7" value="De acuerdo"> De acuerdo</label>
+                        <label><input type="radio" name="p7" value="Totalmente de acuerdo"> Totalmente de acuerdo</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dimensión 2: Experiencia cognitiva (Preguntas 8 a 12)  -->
+        <div class="card mb-4 container" style="backdrop-filter: blur(8px);">
+            <div class="card-header" style="background: linear-gradient(135deg, rgba(160,133,110,0.9), rgba(202,178,150,0.9)); color: white; font-weight: bold;">
+                <strong>Dimensión 2: Experiencia cognitiva (Preguntas 8 - 12)</strong>
+            </div>
+
+            <!-- <h5>Dimensión 2: Experiencia cognitiva/h5> -->
+            <div class="card-body" style="background: rgba(250,245,240,0.5);">
+                <div class="mb-3">
+                    <p><strong>8. Las recomendaciones fueron útiles para decidir qué producto elegir.</p></strong>
+                    <div class="d-flex flex-column gap-2">
+                        <label><input type="radio" name="p8" value="Totalmente en desacuerdo" required> Totalmente en desacuerdo</label>
+                        <label><input type="radio" name="p8" value="En desacuerdo"> En desacuerdo</label>
+                        <label><input type="radio" name="p8" value="Ligeramente en desacuerdo"> Ligeramente en desacuerdo</label>
+                        <label><input type="radio" name="p8" value="Ligeramente de acuerdo"> Ligeramente de acuerdo</label>
+                        <label><input type="radio" name="p8" value="De acuerdo"> De acuerdo</label>
+                        <label><input type="radio" name="p8" value="Totalmente de acuerdo"> Totalmente de acuerdo</label>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <p><strong>9. El vendedor/sistema me ayudó a descubrir productos nuevos que me interesaron.</p></strong>
+                    <div class="d-flex flex-column gap-2">
+                    <label><input type="radio" name="p9" value="Totalmente en desacuerdo" required> Totalmente en desacuerdo</label>
+                    <label><input type="radio" name="p9" value="En desacuerdo"> En desacuerdo</label>
+                    <label><input type="radio" name="p9" value="Ligeramente en desacuerdo"> Ligeramente en desacuerdo</label>
+                    <label><input type="radio" name="p9" value="Ligeramente de acuerdo"> Ligeramente de acuerdo</label>
+                    <label><input type="radio" name="p9" value="De acuerdo"> De acuerdo</label>
+                    <label><input type="radio" name="p9" value="Totalmente de acuerdo"> Totalmente de acuerdo</label>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <p><strong>10. La información proporcionada fue clara y comprensible.</p></strong>
+                    <div class="d-flex flex-column gap-2">
+                        <label><input type="radio" name="p10" value="Totalmente en desacuerdo" required> Totalmente en desacuerdo</label>
+                        <label><input type="radio" name="p10" value="En desacuerdo"> En desacuerdo</label>
+                        <label><input type="radio" name="p10" value="Ligeramente en desacuerdo"> Ligeramente en desacuerdo</label>
+                        <label><input type="radio" name="p10" value="Ligeramente de acuerdo"> Ligeramente de acuerdo</label>
+                        <label><input type="radio" name="p10" value="De acuerdo"> De acuerdo</label>
+                        <label><input type="radio" name="p10" value="Totalmente de acuerdo"> Totalmente de acuerdo</label>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <p><strong>11. El vendedor/sistema de recomendación facilitó mi proceso de compra.</p></strong>
+                    <div class="d-flex flex-column gap-2">
+                        <label><input type="radio" name="p11" value="Totalmente en desacuerdo" required> Totalmente en desacuerdo</label>
+                        <label><input type="radio" name="p11" value="En desacuerdo"> En desacuerdo</label>
+                        <label><input type="radio" name="p11" value="Ligeramente en desacuerdo"> Ligeramente en desacuerdo</label>
+                        <label><input type="radio" name="p11" value="Ligeramente de acuerdo"> Ligeramente de acuerdo</label>
+                        <label><input type="radio" name="p11" value="De acuerdo"> De acuerdo</label>
+                        <label><input type="radio" name="p11" value="Totalmente de acuerdo"> Totalmente de acuerdo</label>
+                    </div>
+                </div>
+
+            <div class="mb-3">
+                <p><strong>12. Las sugerencias se adaptaron a mis necesidades o preferencias.</p></strong>
+                <div class="d-flex flex-column gap-2">
+                    <label><input type="radio" name="p12" value="Totalmente en desacuerdo" required> Totalmente en desacuerdo</label>
+                    <label><input type="radio" name="p12" value="En desacuerdo"> En desacuerdo</label>
+                    <label><input type="radio" name="p12" value="Ligeramente en desacuerdo"> Ligeramente en desacuerdo</label>
+                    <label><input type="radio" name="p12" value="Ligeramente de acuerdo"> Ligeramente de acuerdo</label>
+                    <label><input type="radio" name="p12" value="De acuerdo"> De acuerdo</label>
+                    <label><input type="radio" name="p12" value="Totalmente de acuerdo"> Totalmente de acuerdo</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dimensión 3: Experiencia social (Preguntas 13 a 15) -->
+        <div class="card mb-4 container"  style="backdrop-filter: blur(8px);">
+            <div class="card-header" style="background: linear-gradient(135deg, rgba(140,105,80,0.9), rgba(200,170,140,0.9)); color: white; font-weight: bold;">
+                <strong>Dimensión 3: Experiencia social (Preguntas 13 - 15)</strong>
+            </div>
+
+            <!-- Dimensión 3: Experiencia social -->
+            <h5>Dimensión 3: Experiencia social</h5> -->
+
+            <div class="card-body" style="background: rgba(248,240,232,0.5);">
+                <div class="mb-3">
+                    <p><strong>13. Compartí mi experiencia de compra con otras personas.</p></strong>
+                    <div class="d-flex flex-column gap-2">
+                        <label><input type="radio" name="p13" value="Totalmente en desacuerdo" required> Totalmente en desacuerdo</label>
+                        <label><input type="radio" name="p13" value="En desacuerdo"> En desacuerdo</label>
+                        <label><input type="radio" name="p13" value="Ligeramente en desacuerdo"> Ligeramente en desacuerdo</label>
+                        <label><input type="radio" name="p13" value="Ligeramente de acuerdo"> Ligeramente de acuerdo</label>
+                        <label><input type="radio" name="p13" value="De acuerdo"> De acuerdo</label>
+                        <label><input type="radio" name="p13" value="Totalmente de acuerdo"> Totalmente de acuerdo</label>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <p><strong>14. Recomendaría este servicio brindado por el vendedor/sistema a familiares o amigos.</p></strong>
+                    <div class="d-flex flex-column gap-2">
+                        <label><input type="radio" name="p14" value="Totalmente en desacuerdo" required> Totalmente en desacuerdo</label>
+                        <label><input type="radio" name="p14" value="En desacuerdo"> En desacuerdo</label>
+                        <label><input type="radio" name="p14" value="Ligeramente en desacuerdo"> Ligeramente en desacuerdo</label>
+                        <label><input type="radio" name="p14" value="Ligeramente de acuerdo"> Ligeramente de acuerdo</label>
+                        <label><input type="radio" name="p14" value="De acuerdo"> De acuerdo</label>
+                        <label><input type="radio" name="p14" value="Totalmente de acuerdo"> Totalmente de acuerdo</label>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <p><strong>15. Me sentí parte de una comunidad de clientes satisfechos.</p></strong>
+                    <div class="d-flex flex-column gap-2">
+                        <label><input type="radio" name="p15" value="Totalmente en desacuerdo" required> Totalmente en desacuerdo</label>
+                        <label><input type="radio" name="p15" value="En desacuerdo"> En desacuerdo</label>
+                        <label><input type="radio" name="p15" value="Ligeramente en desacuerdo"> Ligeramente en desacuerdo</label>
+                        <label><input type="radio" name="p15" value="Ligeramente de acuerdo"> Ligeramente de acuerdo</label>
+                        <label><input type="radio" name="p15" value="De acuerdo"> De acuerdo</label>
+                        <label><input type="radio" name="p15" value="Totalmente de acuerdo"> Totalmente de acuerdo</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center mb-5">
+            <button type="submit" class="btn btn-primary">Enviar encuesta</button>
+        </div>
+
+    </form>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

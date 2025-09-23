@@ -1,0 +1,261 @@
+/* Index */
+body {
+    background-image: url("../images/fondo.jpg");
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    color: white;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    padding: 20px;
+    background-repeat: no-repeat;
+    /* backdrop-filter: blur(0px); */
+}
+
+.titulo {
+    text-align: center;
+    font-size: 3rem;
+    margin-top: 20px;
+    margin-bottom: 40px;
+    font-weight: bold;
+    text-shadow: 1px 1px 2px #000;
+    color: white;
+}
+
+form {
+    max-width: 600px;
+    margin: 0 auto;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 0 10px #000;
+}
+
+.Opciones {
+    max-width: 600px;
+    margin: 0 auto;
+    background: rgba(83, 72, 72, 0.5);
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 0 10px #000;
+}
+
+.form-control, .form-select {
+    border-radius: 10px;
+    margin-bottom: 15px;
+}
+
+button[type="submit"] {
+    width: 100%;
+    padding: 12px;
+    font-size: 1.1rem;
+    border-radius: 10px;
+    background-color: #f4c542;
+    color: black;
+    font-weight: bold;
+    border: none;
+    transition: background-color 0.3s ease;
+}
+
+button[type="submit"]:hover {
+    background-color: #e0b12d;
+}
+
+/* Rejilla de productos */
+.row {
+    margin-top: 40px;
+}
+
+#perfil_sabor_group {
+    margin-top: -30px;
+    margin-bottom: 20px;
+    color: white;
+}
+
+.producto {
+    background: rgba(0, 0, 0, 0.7);
+    border-radius: 15px;
+    padding: 15px;
+    margin-bottom: 30px;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    transition: transform 0.3s ease;
+    color: white;
+}
+
+.producto:hover {
+    transform: scale(1.03);
+}
+
+.producto img {
+    width: 95%;
+    height: 200px;
+    object-fit: cover;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+.img:hover {
+    transform: scale(1.2);
+}
+.choices__list--dropdown {
+  background-color: #f0f0f0;
+  border-radius: 8px;
+}
+
+.choices__item--selectable {
+  color: #333;
+  background-color: #fff;
+  transition: background 0.2s ease;
+}
+
+.choices__item--selectable:hover {
+  background-color: #0077ff;
+  color: #53330e;
+}
+
+
+/* Encuesta */
+.titulo_encuesta {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 40px;
+    font-weight: bold;
+    text-shadow: 1px 1px 2px #000;
+    color: white;
+}
+
+.contenedor_resultado_titulo {
+    max-width: 800px;
+    margin: 0px auto;
+    background-color: rgb(0, 0, 0, 0);
+    padding: 10px 10px; 
+    border-radius: 5px 20px 20px;
+    box-shadow: 0 0 10px #000;
+    margin-bottom: 15px;
+}
+
+.contenedor_graficos {
+    max-width: 800px;
+    margin: 0 auto;
+    /* background: linear-gradient(135deg, rgba(49, 34, 17, 0.85), rgba(133, 69, 6, 0.75)); */
+    background: rgba(255, 255, 255, 0.90);
+    color: #000;
+    padding: 15px 20px;
+    /* padding: 1px; */
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+    margin-bottom: 20px;
+}
+
+canvas {
+    background-color: white;
+}
+
+.titulo_resultados {
+    text-align: center;
+    font-size: 2.5rem;
+    font-weight: bold;
+    text-shadow: 1px 1px 2px #000;
+    color: white;
+}
+
+
+/* Header */
+header {
+    position: fixed;
+    top: 0px; 
+    left: 0;
+    width: 100%;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-image: linear-gradient(to right, #be9626, #382900);
+    font-weight: bolder;
+    /* z-index: 1500; */
+}
+
+main {
+    margin-top: 120px; 
+}
+
+/* Logo Texto*/
+.logo {
+    margin-left: 15px;
+    color: white;
+    text-decoration: none;
+    font-weight: bolder;
+    font-size: 20px;
+}
+
+/* Navegador */
+.ul_contador {
+    right: 0;
+    float: left;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-left: 50px;
+    position: absolute;
+}
+
+.ul_contador li {
+    list-style: none;
+    cursor: pointer;
+    padding: 20px;
+    transition: all 0.3s ease;
+    color: white;
+    position: relative;
+}
+
+.ul_contador li .icono {
+    color: white;
+    text-decoration: none;
+}
+
+.ul_contador li:hover {
+    background-image: linear-gradient(to right, #be9626, #382900);
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.ul-segundo {
+    position: absolute;
+    display: none;
+    transform: translateY(20px);
+    z-index: 1;
+    background-color: rgba(205, 178, 90, 0.9);
+    left: 0;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+}
+
+.ul-segundo li {
+    border-bottom: solid 1px white;
+    text-align: center;
+    padding: 10px;
+    width: 100%;
+}
+
+.ul-segundo li a {
+    text-decoration: none;
+    color: white;
+    display: block;
+}
+
+.ul-segundo li:hover {
+    background-image: linear-gradient(to right, #80641a, #201800);
+}
+
+.iniciar-sesion:hover .ul-segundo {
+    display: block;
+}
+
+
+/* Iconos */
+.icono-nav {
+    font-size: 30px;
+    color: white;
+    vertical-align: middle;
+}
