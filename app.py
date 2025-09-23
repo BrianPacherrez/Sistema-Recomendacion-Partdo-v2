@@ -287,19 +287,23 @@ def recomendar_por_historial(usuario):
 
 
 # Configuración de conexión local
-DB_HOST = "localhost"
-DB_NAME = "encuesta_db"
-DB_USER = "postgres"
-DB_PASS = "root"
+# DB_HOST = "localhost"
+# DB_NAME = "encuesta_db"
+# DB_USER = "postgres"
+# DB_PASS = "root"
+
+# def get_db_connection():
+#     conn = psycopg2.connect(
+#         host=DB_HOST,
+#         database=DB_NAME,
+#         user=DB_USER,
+#         password=DB_PASS,
+#         options="-c client_encoding=UTF8"
+#     )
+#     return conn
 
 def get_db_connection():
-    conn = psycopg2.connect(
-        host=DB_HOST,
-        database=DB_NAME,
-        user=DB_USER,
-        password=DB_PASS,
-        options="-c client_encoding=UTF8"
-    )
+    conn = psycopg2.connect(os.environ.get("DATABASE_URL"))
     return conn
 
 
@@ -511,3 +515,4 @@ def logout():
 if __name__ == "__main__":
 
     app.run(debug=True)
+
