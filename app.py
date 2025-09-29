@@ -334,27 +334,38 @@ cur.close()
 conn.close()
 
 
+from psycopg2 import errors
+
 @app.route("/encuesta", methods=["GET", "POST"])
 def encuesta():
     if request.method == "POST":
+        correo = request.form["correo"]
         respuestas = [request.form.get(f"p{i}") for i in range(1, 16)]
 
         conn = get_db_connection()
         cursor = conn.cursor()
 
+        # Verificar si ya existe ese correo
+        cursor.execute("SELECT 1 FROM votos WHERE correo = %s", (correo,))
+        existe = cursor.fetchone()
+
+        if existe:
+            cursor.close()
+            conn.close()
+            flash("⚠️ Este correo ya ha participado en la encuesta.", "warning")
+            return redirect(url_for("index"))
+
+        # Insertar nuevo voto
         cursor.execute("""
             INSERT INTO votos (p1, p2, p3, p4, p5, p6, p7, p8, p9, p10,
-                               p11, p12, p13, p14, p15)
+                               p11, p12, p13, p14, p15, correo)
             VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s,
-                    %s, %s, %s, %s, %s)
-        """, respuestas)
+                    %s, %s, %s, %s, %s, %s)
+        """, (*respuestas, correo))
 
         conn.commit()
         cursor.close()
         conn.close()
-
-        # limpiar flashes anteriores
-        get_flashed_messages()
 
         flash("✅ Encuesta grabada con éxito", "success")
         return redirect(url_for("index"))
@@ -511,8 +522,38 @@ def logout():
     return redirect(url_for("index"))
 
 
+@app.route("/submit", methods=["POST"])
+def submit():
+    correo = request.form["correo"]
+    respuestas = [request.form.get(f"p{i}") for i in range(1, 16)]
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    # Verificar si ya existe ese correo
+    cursor.execute("SELECT 1 FROM votos WHERE correo = %s", (correo,))
+    existe = cursor.fetchone()
+
+    if existe:
+        conn.close()
+        return "⚠️ Este correo ya ha participado en la encuesta.", 400
+
+    # Insertar nuevo voto
+    cursor.execute("""
+        INSERT INTO votos (p1, p2, p3, p4, p5, p6, p7, p8, p9, p10,
+                           p11, p12, p13, p14, p15, correo)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s,
+                %s, %s, %s, %s, %s, %s)
+    """, (*respuestas, correo))
+
+    conn.commit()
+    conn.close()
+
+    return "✅ Gracias por participar."
+    
 
 if __name__ == "__main__":
 
     app.run(debug=True)
+
 
