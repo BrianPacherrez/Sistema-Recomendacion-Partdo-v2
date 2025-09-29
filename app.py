@@ -326,7 +326,8 @@ CREATE TABLE IF NOT EXISTS votos (
     p12 TEXT,
     p13 TEXT,
     p14 TEXT,
-    p15 TEXT                
+    p15 TEXT,
+    correo TEXT UNIQUE
 )
 """)
 conn.commit()
@@ -555,5 +556,6 @@ def submit():
 if __name__ == "__main__":
 
     app.run(debug=True)
+
 
 
