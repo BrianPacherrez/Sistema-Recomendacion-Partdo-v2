@@ -505,7 +505,7 @@ def login():
         # limpiar mensajes anteriores
         get_flashed_messages()
 
-        if username == "admin" and password == "12345":
+        if username == "admin" and password == "srpartdoroot":
             session["rol"] = "admin"
             session["usuario"] = username
             flash("👋 Bienvenido, admin", "success")
@@ -556,6 +556,7 @@ def submit():
 if __name__ == "__main__":
 
     app.run(debug=True)
+
 
 
 
