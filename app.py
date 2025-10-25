@@ -558,11 +558,11 @@ def dashboard():
     conn = get_db_connection()
     cur = conn.cursor()
 
-    # 🔹 Total de encuestas realizadas
+    # Total de encuestas
     cur.execute("SELECT COUNT(*) FROM votos")
     total_encuestas = cur.fetchone()[0]
 
-    # 🔹 Correos de los encuestados
+    # Correos de los encuestados
     cur.execute("SELECT id, correo, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14, p15 FROM votos")
     rows = cur.fetchall()
 
@@ -571,44 +571,79 @@ def dashboard():
               , "p11": row[12], "p12": row[13], "p13": row[14], "p14": row[15], "p15": row[16]} for row in rows]
 
 
-    # Conexión
+    # Cantidad de respuestas
     
-    cur = conn.cursor()
+    cur.execute("""
+    SELECT
+        -- Positivas
+        (
+            SELECT COUNT(*) FROM votos
+            WHERE p1 IN ('De acuerdo', 'Totalmente de acuerdo')
+               OR p2 IN ('De acuerdo', 'Totalmente de acuerdo')
+               OR p3 IN ('De acuerdo', 'Totalmente de acuerdo')
+               OR p4 IN ('De acuerdo', 'Totalmente de acuerdo')
+               OR p5 IN ('De acuerdo', 'Totalmente de acuerdo')
+               OR p6 IN ('De acuerdo', 'Totalmente de acuerdo')
+               OR p7 IN ('De acuerdo', 'Totalmente de acuerdo')
+               OR p8 IN ('De acuerdo', 'Totalmente de acuerdo')
+               OR p9 IN ('De acuerdo', 'Totalmente de acuerdo')
+               OR p10 IN ('De acuerdo', 'Totalmente de acuerdo')
+               OR p11 IN ('De acuerdo', 'Totalmente de acuerdo')
+               OR p12 IN ('De acuerdo', 'Totalmente de acuerdo')
+               OR p13 IN ('De acuerdo', 'Totalmente de acuerdo')
+               OR p14 IN ('De acuerdo', 'Totalmente de acuerdo')
+               OR p15 IN ('De acuerdo', 'Totalmente de acuerdo')
+        ) AS positivas,
 
-    # Mapeo de valores Likert a números
-    likert_map = {
-        'Totalmente en desacuerdo': 1,
-        'En desacuerdo': 2,
-        'Ligeramente en desacuerdo': 3,
-        'Ligeramente de acuerdo': 4,
-        'De acuerdo': 5,
-        'Totalmente de acuerdo': 6
-    }
+        -- Negativas
+        (
+            SELECT COUNT(*) FROM votos
+            WHERE p1 IN ('En desacuerdo', 'Totalmente en desacuerdo')
+               OR p2 IN ('En desacuerdo', 'Totalmente en desacuerdo')
+               OR p3 IN ('En desacuerdo', 'Totalmente en desacuerdo')
+               OR p4 IN ('En desacuerdo', 'Totalmente en desacuerdo')
+               OR p5 IN ('En desacuerdo', 'Totalmente en desacuerdo')
+               OR p6 IN ('En desacuerdo', 'Totalmente en desacuerdo')
+               OR p7 IN ('En desacuerdo', 'Totalmente en desacuerdo')
+               OR p8 IN ('En desacuerdo', 'Totalmente en desacuerdo')
+               OR p9 IN ('En desacuerdo', 'Totalmente en desacuerdo')
+               OR p10 IN ('En desacuerdo', 'Totalmente en desacuerdo')
+               OR p11 IN ('En desacuerdo', 'Totalmente en desacuerdo')
+               OR p12 IN ('En desacuerdo', 'Totalmente en desacuerdo')
+               OR p13 IN ('En desacuerdo', 'Totalmente en desacuerdo')
+               OR p14 IN ('En desacuerdo', 'Totalmente en desacuerdo')
+               OR p15 IN ('En desacuerdo', 'Totalmente en desacuerdo')
+        ) AS negativas,
 
-    # Traer respuestas p1 a p7
-    cur.execute("SELECT p1, p2, p3, p4, p5, p6, p7 FROM votos;")
-    respuestas = cur.fetchall()
+        -- Neutras
+        (
+            SELECT COUNT(*) FROM votos
+            WHERE p1 IN ('Ligeramente en desacuerdo', 'Ligeramente de acuerdo')
+               OR p2 IN ('Ligeramente en desacuerdo', 'Ligeramente de acuerdo')
+               OR p3 IN ('Ligeramente en desacuerdo', 'Ligeramente de acuerdo')
+               OR p4 IN ('Ligeramente en desacuerdo', 'Ligeramente de acuerdo')
+               OR p5 IN ('Ligeramente en desacuerdo', 'Ligeramente de acuerdo')
+               OR p6 IN ('Ligeramente en desacuerdo', 'Ligeramente de acuerdo')
+               OR p7 IN ('Ligeramente en desacuerdo', 'Ligeramente de acuerdo')
+               OR p8 IN ('Ligeramente en desacuerdo', 'Ligeramente de acuerdo')
+               OR p9 IN ('Ligeramente en desacuerdo', 'Ligeramente de acuerdo')
+               OR p10 IN ('Ligeramente en desacuerdo', 'Ligeramente de acuerdo')
+               OR p11 IN ('Ligeramente en desacuerdo', 'Ligeramente de acuerdo')
+               OR p12 IN ('Ligeramente en desacuerdo', 'Ligeramente de acuerdo')
+               OR p13 IN ('Ligeramente en desacuerdo', 'Ligeramente de acuerdo')
+               OR p14 IN ('Ligeramente en desacuerdo', 'Ligeramente de acuerdo')
+               OR p15 IN ('Ligeramente en desacuerdo', 'Ligeramente de acuerdo')
+        ) AS neutras;
+        """)
 
-    # Convertir texto a número y calcular promedio
-    promedios = []
-    for fila in respuestas:
-        valores = [likert_map.get(r, 0) for r in fila]  # Convierte cada respuesta
-        promedio = sum(valores) / len(valores)
-        promedios.append(promedio)
-
-    # Promedio general (de todos los encuestados)
-    if promedios:
-        promedio_afectiva = sum(promedios) / len(promedios)
-    else:
-        promedio_afectiva = 0
-
-    conn.close()
-
+    positivas, negativas, neutras = cur.fetchone()
 
     return render_template(
         "dashboard.html",
         total_encuestas=total_encuestas,
-        promedio_afectiva=promedio_afectiva,
+        positivas=positivas,
+        negativas=negativas,
+        neutras=neutras,
         datos=datos
     )
 
@@ -616,6 +651,7 @@ def dashboard():
 if __name__ == "__main__":
 
     app.run(debug=True)
+
 
 
 
