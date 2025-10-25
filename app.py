@@ -551,11 +551,72 @@ def submit():
     conn.close()
 
     return "✅ Gracias por participar."
+
+
+@app.route("/dashboard")
+def dashboard():
+    conn = get_db_connection()
+    cur = conn.cursor()
+
+    # 🔹 Total de encuestas realizadas
+    cur.execute("SELECT COUNT(*) FROM votos")
+    total_encuestas = cur.fetchone()[0]
+
+    # 🔹 Correos de los encuestados
+    cur.execute("SELECT id, correo, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14, p15 FROM votos")
+    rows = cur.fetchall()
+
+    datos = [{"id": row[0], "correo": row[1], "p1": row[2], "p2": row[3], "p3": row[4], "p4": row[5]
+              , "p5": row[6], "p6": row[7], "p7": row[8], "p8": row[9], "p9": row[10], "p10": row[11]
+              , "p11": row[12], "p12": row[13], "p13": row[14], "p14": row[15], "p15": row[16]} for row in rows]
+
+
+    # Conexión
     
+    cur = conn.cursor()
+
+    # Mapeo de valores Likert a números
+    likert_map = {
+        'Totalmente en desacuerdo': 1,
+        'En desacuerdo': 2,
+        'Ligeramente en desacuerdo': 3,
+        'Ligeramente de acuerdo': 4,
+        'De acuerdo': 5,
+        'Totalmente de acuerdo': 6
+    }
+
+    # Traer respuestas p1 a p7
+    cur.execute("SELECT p1, p2, p3, p4, p5, p6, p7 FROM votos;")
+    respuestas = cur.fetchall()
+
+    # Convertir texto a número y calcular promedio
+    promedios = []
+    for fila in respuestas:
+        valores = [likert_map.get(r, 0) for r in fila]  # Convierte cada respuesta
+        promedio = sum(valores) / len(valores)
+        promedios.append(promedio)
+
+    # Promedio general (de todos los encuestados)
+    if promedios:
+        promedio_afectiva = sum(promedios) / len(promedios)
+    else:
+        promedio_afectiva = 0
+
+    conn.close()
+
+
+    return render_template(
+        "dashboard.html",
+        total_encuestas=total_encuestas,
+        promedio_afectiva=promedio_afectiva,
+        datos=datos
+    )
+
 
 if __name__ == "__main__":
 
     app.run(debug=True)
+
 
 
 
