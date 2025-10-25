@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>DASHBOARD</title>
+    <link href="{{ url_for('static', filename='css/style_dashboard.css') }}" rel="stylesheet" />
+    <!-- <link href="/static/css/style_dashboard.css" rel="stylesheet" /> -->
+    <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet"
+        crossorigin="anonymous" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js" crossorigin="anonymous">
+    </script>
+  
+
+</head>
+
+<body class="sb-nav-fixed">
+    <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+        <a class="navbar-brand" href="index.html">PARTDO</a>
+        <button class="btn btn-link btn-sm order-1 order-lg-0" id="sidebarToggle" href="#"><i
+            class="fas fa-bars"></i></button>
+        <ul class="navbar-nav ml-auto mr-0 mr-md-3 my-2 my-md-0">
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" id="userDropdown" href="#" role="button" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false">
+                Bienvenido, <?php echo $usuario ?>
+                <i class="fas fa-user fa-fw"></i></a>
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+                    <a class="dropdown-item" href="#">Configuración</a>
+                <div class="dropdown-divider">
+                </div>
+                    <a class="dropdown-item" href="/Views/login/logout.php">Salir</a>
+                </div>
+            </li>
+        </ul>
+    </nav>
+    <div id="layoutSidenav">
+        <div id="layoutSidenav_nav">
+            <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+                <div class="sb-sidenav-menu">
+                    <div class="nav">
+                        <div class="sb-sidenav-menu-heading">Panel</div>
+                        <a class="nav-link" href="#">
+                            <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                            Dashboard
+                        </a>
+
+                        <?php if ($tipo_usuario == 1) { ?>
+
+                        <div class="sb-sidenav-menu-heading">Interfaz</div>
+                        
+                        <a class="nav-link" href="index.html">
+                            <div class="sb-nav-link-icon"><i class="fas fa-donate"></i></div>
+                            Resultados
+                        </a>
+                        <?php } ?>
+
+                        <div class="sb-sidenav-menu-heading">Sesión</div>
+                        <a class="nav-link" href="../../index.php">
+                            <div class="sb-nav-link-icon"><i class="fa fa-home"></i></div>
+                            Inicio
+                        </a>
+                        <a class="nav-link" href="/Views/login/logout.php">
+                            <div class="sb-nav-link-icon"><i class="fas fa-power-off"></i></div>
+                            Cerrar sesión
+                        </a>
+                    </div>
+                </div>
+                <div class="sb-sidenav-footer">
+                    <div class="small">Conectado como:</div>
+                    <?php echo $rol ?>
+                </div>
+            </nav>
+        </div>
+
+        <div id="layoutSidenav_content">
+            <main>
+                <div class="container-fluid">
+                    <h1 class="mt-4">Dashboard</h1>
+                    <ol class="breadcrumb mb-4">
+                        <li class="breadcrumb-item active">Dashboard</li>
+                    </ol>
+                    <div class="row">
+                        <div class="col-xl-3 col-md-6">
+                            <div class="card bg-primary text-white mb-4">
+                                <div class="card-body">Correos registrados</div>
+                                <div class="card-footer d-flex align-items-center justify-content-between">
+                                    <a class="small text-white stretched-link" href="#"></a>
+                                    <h2>{{ total_encuestas }}</h2>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-md-6">
+                            <div class="card bg-warning text-white mb-4">
+                                <div class="card-body">Promedio de respuestas</div>
+                                <div class="card-footer d-flex align-items-center justify-content-between">
+                                    <a class="small text-white stretched-link" href="#">
+                                    <h2>{{ promedio_afectiva }}</h2>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-md-6">
+                            <div class="card bg-success text-white mb-4">
+                                <div class="card-body">Promedio de respuestas</div>
+                                <div class="card-footer d-flex align-items-center justify-content-between">
+                                    <a class="small text-white stretched-link" href="#"></a>
+                                    <h2>{{ total_encuestas }}</h2>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-md-6">
+                            <div class="card bg-danger text-white mb-4">
+                                <div class="card-body">Encuestas válidas</div>
+                                <div class="card-footer d-flex align-items-center justify-content-between">
+                                    <a class="small text-white stretched-link" href="#"></a>
+                                    <h2>{{ total_encuestas }}</h2>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <i class="fas fa-table mr-1"></i>
+                            Lista de usuarios
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Correo</th>
+                                            <th>Pregunta 1</th>
+                                            <th>Pregunta 2</th>
+                                            <th>Pregunta 3</th>
+                                            <th>Pregunta 4</th>
+                                            <th>Pregunta 5</th>
+                                            <th>Pregunta 6</th>
+                                            <th>Pregunta 7</th>
+                                            <th>Pregunta 8</th>
+                                            <th>Pregunta 9</th>
+                                            <th>Pregunta 10</th>
+                                            <th>Pregunta 11</th>
+                                            <th>Pregunta 12</th>
+                                            <th>Pregunta 13</th>
+                                            <th>Pregunta 14</th>
+                                            <th>Pregunta 15</th>
+                                        </tr>
+                                    </thead>
+                                    <tfoot>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Correo</th>
+                                            <th>Pregunta 1</th>
+                                            <th>Pregunta 2</th>
+                                            <th>Pregunta 3</th>
+                                            <th>Pregunta 4</th>
+                                            <th>Pregunta 5</th>
+                                            <th>Pregunta 6</th>
+                                            <th>Pregunta 7</th>
+                                            <th>Pregunta 8</th>
+                                            <th>Pregunta 9</th>
+                                            <th>Pregunta 10</th>
+                                            <th>Pregunta 11</th>
+                                            <th>Pregunta 12</th>
+                                            <th>Pregunta 13</th>
+                                            <th>Pregunta 14</th>
+                                            <th>Pregunta 15</th>
+                                        </tr>
+                                    </tfoot>
+                                    <tbody>
+                                        {% for d in datos %}
+                                        <tr>
+                                            <td>{{ d.id }}</td>
+                                            <td>{{ d.correo }}</td>
+                                            <td>{{ d.p1 }}</td>
+                                            <td>{{ d.p2 }}</td>
+                                            <td>{{ d.p3 }}</td>
+                                            <td>{{ d.p4 }}</td>
+                                            <td>{{ d.p5 }}</td>
+                                            <td>{{ d.p6 }}</td>
+                                            <td>{{ d.p7 }}</td>
+                                            <td>{{ d.p8 }}</td>
+                                            <td>{{ d.p9 }}</td>
+                                            <td>{{ d.p10 }}</td>
+                                            <td>{{ d.p11 }}</td>
+                                            <td>{{ d.p12 }}</td>
+                                            <td>{{ d.p13 }}</td>
+                                            <td>{{ d.p14 }}</td>
+                                            <td>{{ d.p15 }}</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+            <footer class="py-4 bg-light mt-auto">
+                <div class="container-fluid">
+                    <div class="d-flex align-items-center justify-content-between small">
+                        <div class="text-muted">Copyright &copy; Your Website 2020</div>
+                        <div>
+                        <a href="#">Privacy Policy</a>
+                        &middot;
+                        <a href="#">Terms &amp; Conditions</a>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+    
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+
+    <script src="{{ url_for('static', filename='/js/scripts.js') }}"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
+
+    <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
+
+    <script src="{{ url_for('static', filename='/js/datatables-demo.js') }}"></script>
+
+  
+</body>
+
+</html>
