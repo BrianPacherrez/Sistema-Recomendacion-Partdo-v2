@@ -610,8 +610,7 @@ def dashboard():
             (SELECT COUNT(*) FROM votos WHERE p13 IN ('Ligeramente de acuerdo', 'Ligeramente en desacuerdo')) +
             (SELECT COUNT(*) FROM votos WHERE p14 IN ('Ligeramente de acuerdo', 'Ligeramente en desacuerdo')) +
             (SELECT COUNT(*) FROM votos WHERE p15 IN ('Ligeramente de acuerdo', 'Ligeramente en desacuerdo'))
-        ) AS neutras;
-        """)
+        ) AS neutras,
 
         -- Negativas
         (
@@ -630,7 +629,8 @@ def dashboard():
             (SELECT COUNT(*) FROM votos WHERE p13 IN ('En desacuerdo', 'Totalmente en desacuerdo')) +
             (SELECT COUNT(*) FROM votos WHERE p14 IN ('En desacuerdo', 'Totalmente en desacuerdo')) +
             (SELECT COUNT(*) FROM votos WHERE p15 IN ('En desacuerdo', 'Totalmente en desacuerdo'))
-        ) AS negativas,
+        ) AS negativas;
+        """)
 
     positivas, neutras, negativas  = cur.fetchone()
 
@@ -647,6 +647,7 @@ def dashboard():
 if __name__ == "__main__":
 
     app.run(debug=True)
+
 
 
 
