@@ -136,7 +136,7 @@ def index():
         sabores_seleccionados = perfil  # tal cual lo escribió el usuario
 
 
-        # Diccionario de traducción sabores
+        # Diccionario para traducir sabores
         sabores_map = {
             "es": {
                 "dulce": "dulce",
@@ -166,7 +166,7 @@ def index():
             }
         }
 
-        # Convertir al español SIEMPRE antes de recomendar
+        # Convertir en español siempre antes de recomendar
         perfil_usuario = [sabores_map[lang].get(s.lower(), s) for s in perfil]
 
 
@@ -187,7 +187,7 @@ def index():
             else:
                 return [traducciones_productos.get(nombre, {}).get("en", nombre) for nombre in lista]
 
-        # 🔹 Verificar si es usuario nuevo
+        # Verificar si es usuario nuevo
         es_nuevo = nombre not in df_usuarios['usuario'].str.lower().unique()
 
         if es_nuevo:
@@ -199,7 +199,7 @@ def index():
             historial = df_usuarios[df_usuarios['usuario'].str.lower() == nombre]["producto"].tolist()
             recomendaciones = recomendar_por_historial(nombre)
 
-        # Traducir productos al idioma seleccionado
+        # Traducir los productos según el idioma seleccionado
         recomendaciones = traducir_nombres(recomendaciones, lang)
         historial = traducir_nombres(historial, lang)
 
@@ -572,78 +572,74 @@ def dashboard():
 
 
     # Cantidad de respuestas
-    
     cur.execute("""
     SELECT
         -- Positivas
         (
-            SELECT COUNT(*) FROM votos
-            WHERE p1 IN ('De acuerdo', 'Totalmente de acuerdo')
-               OR p2 IN ('De acuerdo', 'Totalmente de acuerdo')
-               OR p3 IN ('De acuerdo', 'Totalmente de acuerdo')
-               OR p4 IN ('De acuerdo', 'Totalmente de acuerdo')
-               OR p5 IN ('De acuerdo', 'Totalmente de acuerdo')
-               OR p6 IN ('De acuerdo', 'Totalmente de acuerdo')
-               OR p7 IN ('De acuerdo', 'Totalmente de acuerdo')
-               OR p8 IN ('De acuerdo', 'Totalmente de acuerdo')
-               OR p9 IN ('De acuerdo', 'Totalmente de acuerdo')
-               OR p10 IN ('De acuerdo', 'Totalmente de acuerdo')
-               OR p11 IN ('De acuerdo', 'Totalmente de acuerdo')
-               OR p12 IN ('De acuerdo', 'Totalmente de acuerdo')
-               OR p13 IN ('De acuerdo', 'Totalmente de acuerdo')
-               OR p14 IN ('De acuerdo', 'Totalmente de acuerdo')
-               OR p15 IN ('De acuerdo', 'Totalmente de acuerdo')
+            (SELECT COUNT(*) FROM votos WHERE p1 IN ('De acuerdo', 'Totalmente de acuerdo')) +
+            (SELECT COUNT(*) FROM votos WHERE p2 IN ('De acuerdo', 'Totalmente de acuerdo')) +
+            (SELECT COUNT(*) FROM votos WHERE p3 IN ('De acuerdo', 'Totalmente de acuerdo')) +
+            (SELECT COUNT(*) FROM votos WHERE p4 IN ('De acuerdo', 'Totalmente de acuerdo')) +
+            (SELECT COUNT(*) FROM votos WHERE p5 IN ('De acuerdo', 'Totalmente de acuerdo')) +
+            (SELECT COUNT(*) FROM votos WHERE p6 IN ('De acuerdo', 'Totalmente de acuerdo')) +
+            (SELECT COUNT(*) FROM votos WHERE p7 IN ('De acuerdo', 'Totalmente de acuerdo')) +
+            (SELECT COUNT(*) FROM votos WHERE p8 IN ('De acuerdo', 'Totalmente de acuerdo')) +
+            (SELECT COUNT(*) FROM votos WHERE p9 IN ('De acuerdo', 'Totalmente de acuerdo')) +
+            (SELECT COUNT(*) FROM votos WHERE p10 IN ('De acuerdo', 'Totalmente de acuerdo')) +
+            (SELECT COUNT(*) FROM votos WHERE p11 IN ('De acuerdo', 'Totalmente de acuerdo')) +
+            (SELECT COUNT(*) FROM votos WHERE p12 IN ('De acuerdo', 'Totalmente de acuerdo')) +
+            (SELECT COUNT(*) FROM votos WHERE p13 IN ('De acuerdo', 'Totalmente de acuerdo')) +
+            (SELECT COUNT(*) FROM votos WHERE p14 IN ('De acuerdo', 'Totalmente de acuerdo')) +
+            (SELECT COUNT(*) FROM votos WHERE p15 IN ('De acuerdo', 'Totalmente de acuerdo'))
         ) AS positivas,
-
-        -- Negativas
-        (
-            SELECT COUNT(*) FROM votos
-            WHERE p1 IN ('En desacuerdo', 'Totalmente en desacuerdo')
-               OR p2 IN ('En desacuerdo', 'Totalmente en desacuerdo')
-               OR p3 IN ('En desacuerdo', 'Totalmente en desacuerdo')
-               OR p4 IN ('En desacuerdo', 'Totalmente en desacuerdo')
-               OR p5 IN ('En desacuerdo', 'Totalmente en desacuerdo')
-               OR p6 IN ('En desacuerdo', 'Totalmente en desacuerdo')
-               OR p7 IN ('En desacuerdo', 'Totalmente en desacuerdo')
-               OR p8 IN ('En desacuerdo', 'Totalmente en desacuerdo')
-               OR p9 IN ('En desacuerdo', 'Totalmente en desacuerdo')
-               OR p10 IN ('En desacuerdo', 'Totalmente en desacuerdo')
-               OR p11 IN ('En desacuerdo', 'Totalmente en desacuerdo')
-               OR p12 IN ('En desacuerdo', 'Totalmente en desacuerdo')
-               OR p13 IN ('En desacuerdo', 'Totalmente en desacuerdo')
-               OR p14 IN ('En desacuerdo', 'Totalmente en desacuerdo')
-               OR p15 IN ('En desacuerdo', 'Totalmente en desacuerdo')
-        ) AS negativas,
 
         -- Neutras
         (
-            SELECT COUNT(*) FROM votos
-            WHERE p1 IN ('Ligeramente en desacuerdo', 'Ligeramente de acuerdo')
-               OR p2 IN ('Ligeramente en desacuerdo', 'Ligeramente de acuerdo')
-               OR p3 IN ('Ligeramente en desacuerdo', 'Ligeramente de acuerdo')
-               OR p4 IN ('Ligeramente en desacuerdo', 'Ligeramente de acuerdo')
-               OR p5 IN ('Ligeramente en desacuerdo', 'Ligeramente de acuerdo')
-               OR p6 IN ('Ligeramente en desacuerdo', 'Ligeramente de acuerdo')
-               OR p7 IN ('Ligeramente en desacuerdo', 'Ligeramente de acuerdo')
-               OR p8 IN ('Ligeramente en desacuerdo', 'Ligeramente de acuerdo')
-               OR p9 IN ('Ligeramente en desacuerdo', 'Ligeramente de acuerdo')
-               OR p10 IN ('Ligeramente en desacuerdo', 'Ligeramente de acuerdo')
-               OR p11 IN ('Ligeramente en desacuerdo', 'Ligeramente de acuerdo')
-               OR p12 IN ('Ligeramente en desacuerdo', 'Ligeramente de acuerdo')
-               OR p13 IN ('Ligeramente en desacuerdo', 'Ligeramente de acuerdo')
-               OR p14 IN ('Ligeramente en desacuerdo', 'Ligeramente de acuerdo')
-               OR p15 IN ('Ligeramente en desacuerdo', 'Ligeramente de acuerdo')
+            (SELECT COUNT(*) FROM votos WHERE p1 IN ('Ligeramente de acuerdo', 'Ligeramente en desacuerdo')) +
+            (SELECT COUNT(*) FROM votos WHERE p2 IN ('Ligeramente de acuerdo', 'Ligeramente en desacuerdo')) +
+            (SELECT COUNT(*) FROM votos WHERE p3 IN ('Ligeramente de acuerdo', 'Ligeramente en desacuerdo')) +
+            (SELECT COUNT(*) FROM votos WHERE p4 IN ('Ligeramente de acuerdo', 'Ligeramente en desacuerdo')) +
+            (SELECT COUNT(*) FROM votos WHERE p5 IN ('Ligeramente de acuerdo', 'Ligeramente en desacuerdo')) +
+            (SELECT COUNT(*) FROM votos WHERE p6 IN ('Ligeramente de acuerdo', 'Ligeramente en desacuerdo')) +
+            (SELECT COUNT(*) FROM votos WHERE p7 IN ('Ligeramente de acuerdo', 'Ligeramente en desacuerdo')) +
+            (SELECT COUNT(*) FROM votos WHERE p8 IN ('Ligeramente de acuerdo', 'Ligeramente en desacuerdo')) +
+            (SELECT COUNT(*) FROM votos WHERE p9 IN ('Ligeramente de acuerdo', 'Ligeramente en desacuerdo')) +
+            (SELECT COUNT(*) FROM votos WHERE p10 IN ('Ligeramente de acuerdo', 'Ligeramente en desacuerdo')) +
+            (SELECT COUNT(*) FROM votos WHERE p11 IN ('Ligeramente de acuerdo', 'Ligeramente en desacuerdo')) +
+            (SELECT COUNT(*) FROM votos WHERE p12 IN ('Ligeramente de acuerdo', 'Ligeramente en desacuerdo')) +
+            (SELECT COUNT(*) FROM votos WHERE p13 IN ('Ligeramente de acuerdo', 'Ligeramente en desacuerdo')) +
+            (SELECT COUNT(*) FROM votos WHERE p14 IN ('Ligeramente de acuerdo', 'Ligeramente en desacuerdo')) +
+            (SELECT COUNT(*) FROM votos WHERE p15 IN ('Ligeramente de acuerdo', 'Ligeramente en desacuerdo'))
         ) AS neutras;
         """)
 
-    positivas, negativas, neutras = cur.fetchone()
+        -- Negativas
+        (
+            (SELECT COUNT(*) FROM votos WHERE p1 IN ('En desacuerdo', 'Totalmente en desacuerdo')) +
+            (SELECT COUNT(*) FROM votos WHERE p2 IN ('En desacuerdo', 'Totalmente en desacuerdo')) +
+            (SELECT COUNT(*) FROM votos WHERE p3 IN ('En desacuerdo', 'Totalmente en desacuerdo')) +
+            (SELECT COUNT(*) FROM votos WHERE p4 IN ('En desacuerdo', 'Totalmente en desacuerdo')) +
+            (SELECT COUNT(*) FROM votos WHERE p5 IN ('En desacuerdo', 'Totalmente en desacuerdo')) +
+            (SELECT COUNT(*) FROM votos WHERE p6 IN ('En desacuerdo', 'Totalmente en desacuerdo')) +
+            (SELECT COUNT(*) FROM votos WHERE p7 IN ('En desacuerdo', 'Totalmente en desacuerdo')) +
+            (SELECT COUNT(*) FROM votos WHERE p8 IN ('En desacuerdo', 'Totalmente en desacuerdo')) +
+            (SELECT COUNT(*) FROM votos WHERE p9 IN ('En desacuerdo', 'Totalmente en desacuerdo')) +
+            (SELECT COUNT(*) FROM votos WHERE p10 IN ('En desacuerdo', 'Totalmente en desacuerdo')) +
+            (SELECT COUNT(*) FROM votos WHERE p11 IN ('En desacuerdo', 'Totalmente en desacuerdo')) +
+            (SELECT COUNT(*) FROM votos WHERE p12 IN ('En desacuerdo', 'Totalmente en desacuerdo')) +
+            (SELECT COUNT(*) FROM votos WHERE p13 IN ('En desacuerdo', 'Totalmente en desacuerdo')) +
+            (SELECT COUNT(*) FROM votos WHERE p14 IN ('En desacuerdo', 'Totalmente en desacuerdo')) +
+            (SELECT COUNT(*) FROM votos WHERE p15 IN ('En desacuerdo', 'Totalmente en desacuerdo'))
+        ) AS negativas,
+
+    positivas, neutras, negativas  = cur.fetchone()
 
     return render_template(
         "dashboard.html",
         total_encuestas=total_encuestas,
         positivas=positivas,
-        negativas=negativas,
         neutras=neutras,
+        negativas=negativas,
         datos=datos
     )
 
@@ -651,6 +647,7 @@ def dashboard():
 if __name__ == "__main__":
 
     app.run(debug=True)
+
 
 
 
