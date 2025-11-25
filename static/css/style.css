@@ -11,6 +11,13 @@ body {
     /* backdrop-filter: blur(0px); */
 }
 
+img {
+    height: 60px;        
+    width: auto;          
+    object-fit: contain;  
+    display: block; 
+}
+
 .titulo {
     text-align: center;
     font-size: 3rem;
@@ -260,3 +267,4 @@ main {
     color: white;
     vertical-align: middle;
 }
+
