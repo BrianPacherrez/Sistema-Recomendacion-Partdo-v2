@@ -57,6 +57,7 @@ traducciones = {
         "titulo": "Recomendador de Productos de Café",
         "leer": "Leer",
         "voz": "Hablar",
+        "detener": "Detener",
         "placeholder": "Escribe tu nombre o usuario",
         "sabor_label": "Selecciona hasta 3 sabores:",
         "placeholderValue": "Selecciona sabores",
@@ -80,6 +81,7 @@ traducciones = {
         "titulo": "Coffee Product Recommender",
         "leer": "Read",
         "voz": "Speak",
+        "detener": "Stop",
         "placeholder": "Enter your name or username",
         "sabor_label": "Select up to 3 flavors:",
         "placeholderValue": "Select flavors",
@@ -103,6 +105,7 @@ traducciones = {
         "titulo": "Recomendador de Produtos de Café",
         "leer": "Ler",
         "voz": "Falar",
+        "detener": "Parar",
         "placeholder": "Digite seu nome ou nome de usuário",
         "sabor_label": "Selecione até 3 sabores:",
         "placeholderValue": "Selecionar sabores",
@@ -779,6 +782,7 @@ def chat_audio():
 if __name__ == "__main__":
 
     app.run(debug=True)
+
 
 
 
