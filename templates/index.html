@@ -15,7 +15,7 @@
 </head>
 <body>
     <header>
-        <a class="logo" href="#">PARTDO COFFE</a>
+        <a class="logo" href="{{ url_for('index') }}">PARTDO COFFE</a>
 
         <ul class="ul_contador">
 
@@ -88,8 +88,6 @@
                 </select>
             </div>
             
-            <!-- <br> -->
-
             <button type="submit" class="btn btn-light">{{ textos.boton }}</button>
 
         </form>
@@ -99,6 +97,8 @@
         <form method="get" action="{{ url_for('encuesta') }}">
             <button type="submit" class="btn btn-light">{{ textos.encuesta }}</button>
         </form>
+
+
 
     <hr>
 
@@ -111,6 +111,8 @@
     <button id="btnHablar" class="btn btn-dark" onclick="toggleGrabacion()">
         🎙️ Hablar
     </button>
+
+
 
 
     <div id="sabores-container">
@@ -170,6 +172,9 @@
         {% endif %}
     {% endwith %}
 
+    <script>
+        let choices;
+    </script>
 
     <script>
         let synth = window.speechSynthesis;
@@ -177,7 +182,7 @@
 
         function leerFrases() {
             if (leyendo) {
-                synth.cancel(); // Detener lectura actual
+                synth.cancel();
                 leyendo = false;
                 document.getElementById("btnLeer").innerText = "🔊 {{ textos.leer }}";
                 return;
@@ -201,7 +206,7 @@
                     const utterance = new SpeechSynthesisUtterance(frases[index]);
                     utterance.onend = () => {
                         index++;
-                        leerSiguiente(); // Llama a la siguiente frase al terminar
+                        leerSiguiente();
                     };
                     utterance.onerror = () => {
                         leyendo = false;
@@ -217,13 +222,54 @@
             leerSiguiente();
         }
 
+
+        const saboresDisponibles = {
+            es: ["dulce", "frutal", "caramelo", "chocolate", "floral", "limón", "vino", "suave", "intenso", "cítrico", "cremoso"],
+            en: ["sweet", "fruity", "caramel", "chocolate", "floral", "lemon", "wine", "smooth", "intense", "citrus", "creamy"],
+            br: ["doce", "frutal", "caramelo", "chocolate", "floral", "limão", "vinho", "suave", "intenso", "cítrico", "cremoso"]
+        };
+
+
         function reconocer() {
+            if (!choices) return;
+
             const reconocimiento = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-            reconocimiento.lang = "{{ 'es-ES' if lang == 'es' else 'en-US' }}";
+            reconocimiento.lang = "{{ 'es-ES' if lang == 'es' else 'en-US' if lang == 'en' else 'pt-BR' }}";
+            reconocimiento.interimResults = true;
+
             reconocimiento.onresult = function(event) {
-                const texto = event.results[0][0].transcript.toLowerCase();
-                document.getElementById("nombre").value = texto;
+                const resultado = event.results[event.results.length - 1];
+
+                if (!resultado.isFinal) return; 
+
+                const texto = resultado[0].transcript.toLowerCase();
+                console.log("Texto final:", texto);
+
+                const sabores = {
+                    es: ["dulce", "frutal", "caramelo", "chocolate", "floral", "limón", "vino", "suave", "intenso", "cítrico", "cremoso"],
+                    en: ["sweet", "fruity", "caramel", "chocolate", "floral", "lemon", "wine", "smooth", "intense", "citrus", "creamy"],
+                    br: ["doce", "frutal", "caramelo", "chocolate", "floral", "limão", "vinho", "suave", "intenso", "cítrico", "cremoso"]
+                };
+
+                const lang = "{{ lang }}";
+
+                choices.removeActiveItems();
+
+                const encontrados = sabores[lang].filter(s => texto.includes(s));
+
+                encontrados.slice(0, 3).forEach(sabor => {
+                    choices.setChoiceByValue(sabor);
+                });
+
+                if (encontrados.length > 0) {
+                    alert("Sabores detectados: " + encontrados.join(", "));
+                } else {
+                    alert("No se reconocieron sabores. Intenta decir: dulce, chocolate, frutal");
+                }
+
+                reconocimiento.stop();
             };
+
             reconocimiento.start();
         }
     </script>
@@ -241,14 +287,14 @@
                     const saboresDiv = document.getElementById("sabores-container")
 
                     // Inicializar Choices.js
-                    const choices = new Choices(perfilSelect, {
+                    choices = new Choices(perfilSelect, {
                         removeItemButton: true,
                         maxItemCount: 3,
                         placeholder: true,
                         placeholderValue: '{{ textos.placeholderValue }}',
                         searchEnabled: false,
                         maxItemText: (maxItemCount) => {
-                            return "{{ textos.maxSabores }}";  // Traducción desde Flask
+                            return "{{ textos.maxSabores }}";
                         }
                     });
 
@@ -282,7 +328,7 @@
                         }
                     });
 
-                    const mensajeMax = "{{ textos.maxSabores }}";  // viene traducido desde Flask
+                    const mensajeMax = "{{ textos.maxSabores }}";
                     select.addEventListener("change", function () {
                         if (select.selectedOptions.length > 3) {
                             alert(mensajeMax);
@@ -301,8 +347,84 @@
         });
     </script>
 
+
+    <script>
+        let mediaRecorder = null;
+        let audioChunks = [];
+        let stream = null;
+        let grabando = false;
+
+        function toggleGrabacion() {
+            const btn = document.getElementById("btnHablar");
+
+            // Iniciar grabación
+            if (!grabando) {
+                navigator.mediaDevices.getUserMedia({ audio: true })
+                    .then(s => {
+                        stream = s;
+                        mediaRecorder = new MediaRecorder(stream);
+                        audioChunks = [];
+
+                        mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
+
+                        mediaRecorder.onstop = () => {
+                            const audioBlob = new Blob(audioChunks, { type: "audio/webm" });
+                            enviarAudio(audioBlob);
+
+                            // Apagar micrófono
+                            stream.getTracks().forEach(t => t.stop());
+
+                            btn.innerText = "🎙️ Hablar";
+                            grabando = false;
+                        };
+
+                        mediaRecorder.start();
+
+                        btn.innerText = "⏹️ Detener";
+                        grabando = true;
+                    })
+                    .catch(err => {
+                        console.error("Error micrófono:", err);
+                    });
+            }
+            // Detener grabación
+            else {
+                if (mediaRecorder && mediaRecorder.state === "recording") {
+                    mediaRecorder.stop();
+                }
+            }
+        }
+
+        function enviarAudio(blob) {
+            const formData = new FormData();
+            formData.append("audio", blob);
+
+            fetch("/chat_audio", {
+                method: "POST",
+                body: formData
+            })
+            .then(res => res.json())
+            .then(data => {
+                agregarMensaje("Usuario", data.texto_usuario);
+                agregarMensaje("Asistente", data.respuesta);
+                hablarRespuesta(data.respuesta);
+            });
+        }
+
+        function agregarMensaje(rol, texto) {
+            const chat = document.getElementById("chatBox");
+            chat.innerHTML += `<p><strong>${rol}:</strong> ${texto}</p>`;
+            chat.scrollTop = chat.scrollHeight;
+        }
+
+        function hablarRespuesta(texto) {
+            const utterance = new SpeechSynthesisUtterance(texto);
+            utterance.lang = "{{ 'es-ES' if lang == 'es' else 'en-US' }}";
+            speechSynthesis.speak(utterance);
+        }
+    </script>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
-
 </html>
