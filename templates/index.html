@@ -99,21 +99,17 @@
         </form>
 
 
-
     <hr>
 
-    <h3 class="text-center alert alert-warning">🤖 Asistente virtual del café</h3>
+    <h3 class="text-center alert alert-warning">🤖 {{ textos.asistente }}</h3>
 
-    <div class="chat-box border rounded p-3 mb-3 xd" id="chatBox" style="height: 250px; overflow-y: auto; background-color: #f0f0f0;">
-        <p><strong>Asistente:</strong> Hola, pregúntame tus consultas o por cafés o sabores ☕</p>
+    <div class="chat-box border rounded p-3 mb-3 m-auto" id="chatBox" style="height: 250px; overflow-y: auto; background-color: #f0f0f0;">
+        <p><strong>{{ textos.chat_emisor }}: </strong>{{ textos.chat_respuesta }} </p>
     </div>
 
     <button id="btnHablar" class="btn btn-dark" onclick="toggleGrabacion()">
         🎙️ Hablar
     </button>
-
-
-
 
     <div id="sabores-container">
         {% if sabores_seleccionados %}
@@ -428,3 +424,4 @@
 
 </body>
 </html>
+
