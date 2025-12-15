@@ -666,11 +666,23 @@ client = OpenAI(
     api_key=os.environ.get("OPENAI_API_KEY")
 )
 
-modelo_whisper = WhisperModel(
-    "base",
-    device="cpu",
-    compute_type="int8"
-)
+# modelo_whisper = WhisperModel(
+#     "tiny",
+#     device="cpu",
+#     compute_type="int8"
+# )
+
+whisper_model = None
+
+def get_whisper_model():
+    global whisper_model
+    if whisper_model is None:
+        whisper_model = WhisperModel(
+            "tiny",
+            device="cpu",
+            compute_type="int8"
+        )
+    return whisper_model
 
 @app.route("/chat_audio", methods=["POST"])
 def chat_audio():
@@ -681,10 +693,13 @@ def chat_audio():
         path = tmp.name
 
     # faster-whisper a texto
-    segments, info = modelo_whisper.transcribe(
-        path,
-        language="es"
-    )
+    model = get_whisper_model()
+    segments, info = model.transcribe(path, language="es")
+    
+    # segments, info = modelo_whisper.transcribe(
+    #     path,
+    #     language="es"
+    # )
 
     texto_usuario = " ".join([segment.text for segment in segments])
 
@@ -717,6 +732,7 @@ def chat_audio():
 if __name__ == "__main__":
 
     app.run(debug=True)
+
 
 
 
