@@ -67,6 +67,9 @@ traducciones = {
         "seleccion": "¡Genial! Has seleccionado los sabores:",
         "recomendaciones": "Recomendaciones personalizadas:",
         "historial": "Productos que ya has probado:",
+        "asistente": "Asistente Virtual del Café",
+        "chat_emisor": "Asistente",
+        "chat_respuesta": "¡Hola! Estoy aquí para ayudarte 😊 Pregúntame sobre cafés, sabores o lo que desees conocer ☕",
     },
     "en": {
         "hola": "Hello",
@@ -87,6 +90,9 @@ traducciones = {
         "seleccion": "Great! You've selected the following flavors:",
         "recomendaciones": "Personalized recommendations:",
         "historial": "Products you have already tried:",
+        "asistente": "Virtual Coffee Assistant",
+        "chat_emisor": "Assistant",
+        "chat_respuesta": "Hello! I'm here to help you 😊 Ask me about coffees, flavors, or anything else you want to know ☕",
     },
     "br": {
         "hola": "Olá",
@@ -107,6 +113,9 @@ traducciones = {
         "seleccion": "Ótimo! Vocês selecionou os sabores:",
         "recomendaciones": "Recomendações personalizadas:",
         "historial": "Produtos que vocês ja provou:",
+        "asistente": "Assistente Virtual de Café",
+        "chat_emisor": "Assistente",
+        "chat_respuesta": "Olá! Estou aqui para te ajudar 😊 Pergunte-me sobre cafés, sabores ou qualquer outra coisa que deseje saber ☕",
     }
 }
 
@@ -770,6 +779,7 @@ def chat_audio():
 if __name__ == "__main__":
 
     app.run(debug=True)
+
 
 
 
