@@ -759,9 +759,16 @@ def chat_audio():
     #     language="es"
     # )
 
-    texto_usuario = " ".join([segment.text for segment in segments])
+    # texto_usuario = " ".join([segment.text for segment in segments])
+    texto_usuario = transcript.text.strip()
 
     os.remove(path)
+
+    if not texto_usuario:
+        return jsonify({
+            "texto_usuario": "",
+            "respuesta": "No logré escucharte bien. ¿Podrías repetirlo?"
+        })
 
     from utils.prompts import cargar_prompt
 
@@ -795,6 +802,7 @@ def chat_audio():
 if __name__ == "__main__":
 
     app.run(debug=True)
+
 
 
 
