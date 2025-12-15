@@ -87,6 +87,26 @@ traducciones = {
         "seleccion": "Great! You've selected the following flavors:",
         "recomendaciones": "Personalized recommendations:",
         "historial": "Products you have already tried:",
+    },
+    "br": {
+        "hola": "Olá",
+        "inicia_sesion": "Olá, faça login",
+        "cerrar_sesion": "Sair",
+        "iniciar_sesion": "Entrar",
+        "resultados": "Resultados",
+        "titulo": "Recomendador de Produtos de Café",
+        "leer": "Ler",
+        "voz": "Falar",
+        "placeholder": "Digite seu nome ou nome de usuário",
+        "sabor_label": "Selecione até 3 sabores:",
+        "placeholderValue": "Selecionar sabores",
+        "maxSabores": "Apenas 3 valores podem ser adicionados",
+        "boton": "Receber recomendações",
+        "encuesta": "Enquete", 
+        "sabores": ["Doce", "Frutal", "Caramelo", "Chocolate", "Floral", "Limão", "Vinho", "Suave", "Intenso", "Cítrico", "Cremoso"],
+        "seleccion": "Ótimo! Vocês selecionou os sabores:",
+        "recomendaciones": "Recomendações personalizadas:",
+        "historial": "Produtos que vocês ja provou:",
     }
 }
 
@@ -163,7 +183,20 @@ def index():
                 "intense": "intenso",
                 "citrus": "cítrico",
                 "creamy": "cremoso",
-            }
+            },
+            "br": {
+                "doce": "dulce",
+                "frutal": "frutal",
+                "caramelo": "caramelo",
+                "chocolate": "chocolate",
+                "floral": "floral",
+                "limão": "limão",
+                "vinho": "vino",
+                "suave": "suave",
+                "intenso": "intenso",
+                "cítrico": "cítrico",
+                "cremoso": "cremoso",
+            } 
         }
 
         # Convertir en español siempre antes de recomendar
@@ -172,14 +205,14 @@ def index():
 
         def traducir_nombres(lista, lang):
             traducciones_productos = {
-                "Café Bourbon": {"en": "Bourbon Coffee"},
-                "Café Geisha": {"en": "Geisha Coffee"},
-                "Café de Proceso Natural": {"en": "Natural Process Coffee"},
-                "Café Caturra": {"en": "Caturra Coffee"},
-                "Café Catuai": {"en": "Catuai Coffee"},
-                "Café Heirloom de Etiopia": {"en": "Ethiopian Heirloom Coffee"},
-                "Crema de Café": {"en": "Coffee Cream"},
-                "Jabón Exfoliante de Café": {"en": "Exfoliating Coffee Soap"},
+                "Café Bourbon": {"en": "Bourbon Coffee", "br": "Café Bourbon"},
+                "Café Geisha": {"en": "Geisha Coffee", "br": "Café Geisha"},
+                "Café de Proceso Natural": {"en": "Natural Process Coffee", "br": "Café Processado Naturalmente"},
+                "Café Caturra": {"en": "Caturra Coffee", "br": "Café Caturra"},
+                "Café Catuai": {"en": "Catuai Coffee", "br": "Café Catuai"},
+                "Café Heirloom de Etiopia": {"en": "Ethiopian Heirloom Coffee", "br": "Café Heirloom de Etiopia"},
+                "Crema de Café": {"en": "Coffee Cream", "br": "Creme de Café"},
+                "Jabón Exfoliante de Café": {"en": "Exfoliating Coffee Soap", "br": "Sabonete Esfoliante de Café"},
             }
             
             if lang == "es":
@@ -732,6 +765,7 @@ def chat_audio():
 if __name__ == "__main__":
 
     app.run(debug=True)
+
 
 
 
