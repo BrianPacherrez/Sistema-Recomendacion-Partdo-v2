@@ -727,7 +727,12 @@ def chat_audio():
 
     # faster-whisper a texto
     model = get_whisper_model()
-    segments, info = model.transcribe(path, language="es")
+    segments, info = model.transcribe(
+        path,
+        language="es",
+        beam_size=5,
+        vad_filter=True
+    )
     
     # segments, info = modelo_whisper.transcribe(
     #     path,
@@ -765,6 +770,7 @@ def chat_audio():
 if __name__ == "__main__":
 
     app.run(debug=True)
+
 
 
 
