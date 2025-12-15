@@ -644,9 +644,80 @@ def dashboard():
     )
 
 
+
+
+
+def extraer_sabores(texto):
+    sabores_validos = [
+        "dulce","frutal","caramelo","chocolate","floral",
+        "limón","vino","suave","intenso","cítrico","cremoso"
+    ]
+    texto = texto.lower()
+    return [s for s in sabores_validos if s in texto]
+
+
+
+from faster_whisper import WhisperModel
+import tempfile
+import os
+from openai import OpenAI
+
+client = OpenAI(
+    api_key=os.environ.get("OPENAI_API_KEY")
+)
+
+modelo_whisper = WhisperModel(
+    "base",
+    device="cpu",
+    compute_type="int8"
+)
+
+@app.route("/chat_audio", methods=["POST"])
+def chat_audio():
+    audio = request.files["audio"]
+
+    with tempfile.NamedTemporaryFile(delete=False, suffix=".webm") as tmp:
+        audio.save(tmp.name)
+        path = tmp.name
+
+    # faster-whisper a texto
+    segments, info = modelo_whisper.transcribe(
+        path,
+        language="es"
+    )
+
+    texto_usuario = " ".join([segment.text for segment in segments])
+
+    os.remove(path)
+
+    from utils.prompts import cargar_prompt
+
+    contexto = cargar_prompt("cafe_recomendacion.txt").format(
+        perfil_usuario=", ".join(texto_usuario),
+        productos=df_productos[['producto','perfil_sabor']].to_string(index=False)
+    )
+
+    # GPT
+    respuesta = client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[
+            {"role": "system", "content": contexto},
+            {"role": "user", "content": texto_usuario}
+        ]
+    )
+
+    texto_respuesta = respuesta.choices[0].message.content
+
+    return {
+        "texto_usuario": texto_usuario,
+        "respuesta": texto_respuesta
+    }
+
+
 if __name__ == "__main__":
 
     app.run(debug=True)
+
 
 
 
