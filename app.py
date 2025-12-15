@@ -702,7 +702,7 @@ def extraer_sabores(texto):
 
 
 
-from faster_whisper import WhisperModel
+# from faster_whisper import WhisperModel
 import tempfile
 import os
 from openai import OpenAI
@@ -717,17 +717,17 @@ client = OpenAI(
 #     compute_type="int8"
 # )
 
-whisper_model = None
+# whisper_model = None
 
-def get_whisper_model():
-    global whisper_model
-    if whisper_model is None:
-        whisper_model = WhisperModel(
-            "tiny",
-            device="cpu",
-            compute_type="int8"
-        )
-    return whisper_model
+# def get_whisper_model():
+#     global whisper_model
+#     if whisper_model is None:
+#         whisper_model = WhisperModel(
+#             "tiny",
+#             device="cpu",
+#             compute_type="int8"
+#         )
+#     return whisper_model
 
 @app.route("/chat_audio", methods=["POST"])
 def chat_audio():
@@ -738,13 +738,20 @@ def chat_audio():
         path = tmp.name
 
     # faster-whisper a texto
-    model = get_whisper_model()
-    segments, info = model.transcribe(
-        path,
-        language="es",
-        beam_size=5,
-        vad_filter=True
-    )
+    # model = get_whisper_model()
+    # segments, info = model.transcribe(
+    #     path,
+    #     language="es",
+    #     beam_size=5,
+    #     vad_filter=True
+    # )
+
+    # 🎙️ Speech-to-Text OpenAI
+    with open(path, "rb") as audio_file:
+        transcript = client.audio.transcriptions.create(
+            file=audio_file,
+            model="gpt-4o-transcribe",
+            language="es"
     
     # segments, info = modelo_whisper.transcribe(
     #     path,
@@ -758,7 +765,8 @@ def chat_audio():
     from utils.prompts import cargar_prompt
 
     contexto = cargar_prompt("cafe_recomendacion.txt").format(
-        perfil_usuario=", ".join(texto_usuario),
+        # perfil_usuario=", ".join(texto_usuario),
+        perfil_usuario=texto_usuario,
         productos=df_productos[['producto','perfil_sabor']].to_string(index=False)
     )
 
@@ -771,17 +779,22 @@ def chat_audio():
         ]
     )
 
-    texto_respuesta = respuesta.choices[0].message.content
+    # texto_respuesta = respuesta.choices[0].message.content
 
-    return {
+    # return {
+    #     "texto_usuario": texto_usuario,
+    #     "respuesta": texto_respuesta
+    # }
+
+    return jsonify({
         "texto_usuario": texto_usuario,
-        "respuesta": texto_respuesta
-    }
-
+        "respuesta": respuesta.choices[0].message.content
+    })
 
 if __name__ == "__main__":
 
     app.run(debug=True)
+
 
 
 
