@@ -752,6 +752,7 @@ def chat_audio():
             file=audio_file,
             model="gpt-4o-transcribe",
             language="es"
+        )
     
     # segments, info = modelo_whisper.transcribe(
     #     path,
@@ -794,6 +795,7 @@ def chat_audio():
 if __name__ == "__main__":
 
     app.run(debug=True)
+
 
 
 
