@@ -111,6 +111,10 @@
         🎙️ Hablar
     </button>
 
+    <button id="btnVoz" class="btn btn-secondary" onclick="toggleVoz()">
+        🔊 Activar voz
+    </button>
+
     <div id="sabores-container">
         {% if sabores_seleccionados %}
             <div class="alert alert-warning text-center mt-4">
@@ -345,6 +349,7 @@
 
 
     <script>
+        let vozActivada = false;
         let mediaRecorder = null;
         let audioChunks = [];
         let stream = null;
@@ -391,6 +396,18 @@
             }
         }
 
+        function toggleVoz() {
+            const btn = document.getElementById("btnVoz");
+            vozActivada = !vozActivada;
+
+            if (vozActivada) {
+                btn.innerText = "🔇 Desactivar voz";
+            } else {
+                btn.innerText = "🔊 Activar voz";
+                speechSynthesis.cancel();
+            }
+        }
+
         function enviarAudio(blob) {
             const formData = new FormData();
             formData.append("audio", blob);
@@ -401,10 +418,13 @@
             })
             .then(res => res.json())
             .then(data => {
-                agregarMensaje("Usuario", data.texto_usuario);
-                agregarMensaje("Asistente", data.respuesta);
+            agregarMensaje("Usuario", data.texto_usuario);
+            agregarMensaje("Asistente", data.respuesta);
+
+            if (vozActivada) {
                 hablarRespuesta(data.respuesta);
-            });
+            }
+        });
         }
 
         function agregarMensaje(rol, texto) {
@@ -424,4 +444,5 @@
 
 </body>
 </html>
+
 
