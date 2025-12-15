@@ -6,7 +6,9 @@ psycopg2-binary
 gunicorn
 Jinja2
 
+openai
 faster-whisper
 ctranslate2
 ffmpeg-python
 torch
+python-dotenv
